@@ -7,14 +7,13 @@
 /* 旅伴名單：id 對應 localStorage 存的身份、avatar 對應 SVG symbol、
    color 對應 CSS 變數（珊瑚粉/山吹黃/水色/若竹綠），用來上色 Q 版人物的衣服 */
 const PEOPLE = [
-  { id: "awei", name: "阿緯", fullName: "葉俊緯", avatar: "avatar-awei", color: "mizu" },
-  { id: "yunting", name: "云婷", fullName: "鄭云婷", avatar: "avatar-yunting", color: "coral" },
-  { id: "yunting1", name: "云婷1", fullName: "鄭云婷", avatar: "avatar-yunting-1", color: "coral" },
-  { id: "zhiyang", name: "致養", fullName: "吳致養", avatar: "avatar-generic", color: "yamabuki" },
-  { id: "shengzhao", name: "陞漜", fullName: "黃陞漜", avatar: "avatar-generic", color: "wakatake" },
-  { id: "fengwei", name: "鋒瑋", fullName: "陳鋒瑋", avatar: "avatar-fengwei", color: "coral" },
-  { id: "haidi", name: "海蒂", fullName: "劉海蒂", avatar: "avatar-haidi", color: "mizu-soft" },
-  { id: "simin", name: "思旻", fullName: "吳思旻", avatar: "avatar-generic", color: "yamabuki-soft" }
+  { id: "awei", name: "阿緯", fullName: "葉俊緯", avatar: "avatar-awei", color: "mizu", gender: "male" },
+  { id: "zhiyang", name: "致養", fullName: "吳致養", avatar: "avatar-zhiyang", color: "yamabuki", gender: "male" },
+  { id: "fengwei", name: "鋒瑋", fullName: "陳鋒瑋", avatar: "avatar-fengwei", color: "coral", gender: "male" },
+  { id: "yunting", name: "云婷", fullName: "鄭云婷", avatar: "avatar-yunting", avatarAlt: "avatar-yunting-1", color: "coral", gender: "female" },
+  { id: "shengzhao", name: "陞漜", fullName: "黃陞漜", avatar: "avatar-generic", color: "wakatake", gender: "female" },
+  { id: "haidi", name: "海蒂", fullName: "劉海蒂", avatar: "avatar-haidi", color: "mizu-soft", gender: "female" },
+  { id: "simin", name: "思旻", fullName: "吳思旻", avatar: "avatar-generic", color: "yamabuki-soft", gender: "female" }
 ];
 
 const TRIP_DATA = {

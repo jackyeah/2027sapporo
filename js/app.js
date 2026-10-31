@@ -30,8 +30,8 @@
     const companionText = document.getElementById("heroCompanionText");
 
     grid.innerHTML = PEOPLE.map(p => `
-      <button class="identity-option" data-id="${p.id}">
-        <svg style="--accent: var(--${p.color});"><use href="#${p.avatar}"/></svg>
+      <button class="identity-option" data-id="${p.id}" data-gender="${p.gender}">
+        <svg data-avatar-base="${p.avatar}" data-avatar-alt="${p.avatarAlt || ""}" style="--accent: var(--${p.color});"><use href="#${p.avatar}"/></svg>
         <span class="identity-option__name">${p.name}</span>
       </button>
     `).join("");
@@ -39,12 +39,18 @@
     function applyIdentity(person) {
       if (!person) {
         navIcon.innerHTML = `<use href="#avatar-generic"/>`;
+        navIcon.dataset.avatarBase = "";
+        navIcon.dataset.avatarAlt = "";
         companionWrap.style.display = "none";
         return;
       }
       navIcon.innerHTML = `<use href="#${person.avatar}"/>`;
+      navIcon.dataset.avatarBase = person.avatar;
+      navIcon.dataset.avatarAlt = person.avatarAlt || "";
       navIcon.style.setProperty("--accent", `var(--${person.color})`);
       companionAvatar.innerHTML = `<use href="#${person.avatar}"/>`;
+      companionAvatar.dataset.avatarBase = person.avatar;
+      companionAvatar.dataset.avatarAlt = person.avatarAlt || "";
       companionAvatar.style.setProperty("--accent", `var(--${person.color})`);
       companionText.textContent = `嗨，${person.name}！一起出發吧`;
       companionWrap.style.display = "flex";
@@ -81,6 +87,38 @@
     if (!localStorage.getItem(IDENTITY_KEY)) {
       openModal();
     }
+
+    startAvatarCycle();
+  }
+
+  /* 雙造型人物（如云婷）每 5 秒切換一次頭像，切換時有翻轉特效 */
+  function startAvatarCycle() {
+    const CYCLE_MS = 5000;
+    const FLIP_MS = 600;
+    setInterval(() => {
+      document.querySelectorAll("[data-avatar-alt]").forEach(el => {
+        const alt = el.dataset.avatarAlt;
+        const base = el.dataset.avatarBase;
+        if (!alt || !base) return;
+        const useEl = el.querySelector("use");
+        if (!useEl) return;
+
+        const reduceMotion = document.body.classList.contains("reduce-motion") || prefersReduced.matches;
+        const swap = () => {
+          const next = useEl.getAttribute("href") === `#${base}` ? `#${alt}` : `#${base}`;
+          useEl.setAttribute("href", next);
+        };
+
+        if (reduceMotion) {
+          swap();
+          return;
+        }
+
+        el.classList.add("avatar-flip");
+        setTimeout(swap, FLIP_MS / 2);
+        setTimeout(() => el.classList.remove("avatar-flip"), FLIP_MS);
+      });
+    }, CYCLE_MS);
   }
 
   /* ---------------- 減少動態效果 ---------------- */

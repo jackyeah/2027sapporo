@@ -169,6 +169,9 @@ img, svg { display: block; max-width: 100%; }
   gap: 12px;
   margin-bottom: 16px;
 }
+.identity-option:last-child:nth-child(3n + 1) {
+  grid-column: 2 / 3;
+}
 .identity-option {
   display: flex;
   flex-direction: column;
@@ -181,7 +184,9 @@ img, svg { display: block; max-width: 100%; }
 }
 .identity-option svg { width: 56px; height: 56px; }
 .identity-option__name { font-size: 0.8rem; font-weight: 700; }
-.identity-option.is-selected { background: var(--yamabuki-soft); box-shadow: var(--shadow-hard-sm); }
+.identity-option.is-selected { box-shadow: var(--shadow-hard-sm); }
+.identity-option.is-selected[data-gender="male"] { background: var(--mizu-soft); }
+.identity-option.is-selected[data-gender="female"] { background: var(--coral-soft); }
 
 .identity-modal__skip {
   background: none;
@@ -826,6 +831,15 @@ table.expense-table {
   0%, 100% { transform: rotate(-2deg); }
   50% { transform: rotate(2deg); }
 }
+
+/* ---------- 雙造型人物切換特效（如云婷） ---------- */
+.avatar-flip { animation: avatar-flip 0.6s ease-in-out; }
+@keyframes avatar-flip {
+  0% { transform: scaleX(1); }
+  50% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+body.reduce-motion .avatar-flip { animation: none; }
 
 /* ---------- 1/2 洞爺湖過場動畫：台灣起飛 → 北海道抵達 → 夜晚洞爺湖 ---------- */
 .toya-fade-out-early { animation: toya-fade-out-early 9s ease-in-out forwards; }
