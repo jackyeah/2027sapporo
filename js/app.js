@@ -7,6 +7,9 @@
 
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
 
+  let showPage = () => {};       // 由 initNav 賦值，供跨函式切換頁面
+  let selectItineraryDay = () => {}; // 由 renderItinerary 賦值，供首頁「查看完整行程」按鈕使用
+
   /* ---------------- 減少動態效果 ---------------- */
   function initMotionToggle() {
     const key = "reduceMotion";
@@ -40,6 +43,7 @@
       window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
       history.replaceState(null, "", "#" + pageName);
     }
+    showPage = show;
 
     links.forEach(l => l.addEventListener("click", () => show(l.dataset.page)));
 
@@ -144,6 +148,40 @@
     });
   }
 
+  /* ---------------- 共用：把單一天的資料轉成時間軸 HTML ---------------- */
+  function buildTimelineHtml(day) {
+    const meta = TRIP_DATA.transportMeta;
+
+    const itemsHtml = day.items.map(item => {
+      if (item.type === "transport") {
+        const m = meta[item.transport] || { label: item.transport, color: "coral" };
+        return `
+          <div class="timeline__transport">
+            <span class="transport-tag transport-tag--${item.transport}">
+              <svg><use href="#icon-${item.transport}"/></svg>${m.label}
+            </span>
+            <span>${item.label}</span>
+          </div>
+        `;
+      }
+      return `
+        <div class="timeline__event ${item.highlight ? "is-highlight" : ""}">
+          ${item.time ? `<div class="timeline__time">${item.time}</div>` : ""}
+          <div class="timeline__place">${item.place || ""}${item.highlight ? '<span class="tag tag--must">必去</span>' : ""}</div>
+          <div class="timeline__activity">${item.activity || ""}</div>
+          ${item.note ? `<div class="timeline__note">${item.note}</div>` : ""}
+        </div>
+      `;
+    }).join("");
+
+    return `
+      <div class="day-panel">
+        <h3 class="day-title">${day.date} (${day.weekday})　${day.title}</h3>
+        <div class="timeline">${itemsHtml}</div>
+      </div>
+    `;
+  }
+
   /* ---------------- 行程頁：日期 tab + 時間軸 ---------------- */
   function renderItinerary() {
     const tabsWrap = document.getElementById("dayTabs");
@@ -159,36 +197,7 @@
 
     function renderDay(idx) {
       const day = TRIP_DATA.days[idx];
-      const meta = TRIP_DATA.transportMeta;
-
-      const itemsHtml = day.items.map(item => {
-        if (item.type === "transport") {
-          const m = meta[item.transport] || { label: item.transport, color: "coral" };
-          return `
-            <div class="timeline__transport">
-              <span class="transport-tag transport-tag--${item.transport}">
-                <svg><use href="#icon-${item.transport}"/></svg>${m.label}
-              </span>
-              <span>${item.label}</span>
-            </div>
-          `;
-        }
-        return `
-          <div class="timeline__event ${item.highlight ? "is-highlight" : ""}">
-            ${item.time ? `<div class="timeline__time">${item.time}</div>` : ""}
-            <div class="timeline__place">${item.place || ""}${item.highlight ? '<span class="tag tag--must">必去</span>' : ""}</div>
-            <div class="timeline__activity">${item.activity || ""}</div>
-            ${item.note ? `<div class="timeline__note">${item.note}</div>` : ""}
-          </div>
-        `;
-      }).join("");
-
-      panelWrap.innerHTML = `
-        <div class="day-panel">
-          <h3 class="day-title">${day.date} (${day.weekday})　${day.title}</h3>
-          <div class="timeline">${itemsHtml}</div>
-        </div>
-      `;
+      panelWrap.innerHTML = buildTimelineHtml(day);
 
       tabsWrap.querySelectorAll(".day-tab").forEach(t => {
         t.classList.toggle("is-active", Number(t.dataset.idx) === idx);
@@ -203,6 +212,12 @@
       });
     });
 
+    selectItineraryDay = (idx) => {
+      renderDay(idx);
+      const tab = tabsWrap.querySelector(`.day-tab[data-idx="${idx}"]`);
+      if (tab) tab.scrollIntoView({ behavior: prefersReduced.matches ? "auto" : "smooth", inline: "center", block: "nearest" });
+    };
+
     const todayIdx = findTodayIndex();
     const saved = localStorage.getItem(key);
     renderDay(todayIdx !== -1 ? todayIdx : (saved !== null ? Number(saved) : 0));
@@ -216,6 +231,36 @@
       const target = new Date(y, m - 1, day);
       return target.toDateString() === now.toDateString();
     });
+  }
+
+  /* ---------------- 首頁狀態：出發前／旅行中／已結束 ---------------- */
+  function renderHomeStatus() {
+    const upcoming = document.getElementById("homeUpcoming");
+    const today = document.getElementById("homeToday");
+    const ended = document.getElementById("homeEnded");
+    const now = Date.now();
+    const start = new Date(TRIP_DATA.startDate).getTime();
+    const end = new Date(TRIP_DATA.endDate).getTime();
+    const todayIdx = findTodayIndex();
+
+    upcoming.style.display = "none";
+    today.style.display = "none";
+    ended.style.display = "none";
+
+    if (todayIdx !== -1) {
+      // 旅行中：顯示當天行程
+      const day = TRIP_DATA.days[todayIdx];
+      document.getElementById("todayBanner").innerHTML =
+        `<svg><use href="#icon-snow"/></svg> 今天是 ${day.date} (${day.weekday})`;
+      document.getElementById("todayPanelWrap").innerHTML = buildTimelineHtml(day);
+      today.style.display = "block";
+    } else if (now > end) {
+      // 旅行已結束
+      ended.style.display = "block";
+    } else {
+      // 出發前
+      upcoming.style.display = "block";
+    }
   }
 
   /* ---------------- 裝備頁 ---------------- */
@@ -329,6 +374,18 @@
     }
   }
 
+  /* ---------------- 首頁按鈕 ---------------- */
+  function initHomeButtons() {
+    document.getElementById("gotoItineraryBtn").addEventListener("click", () => {
+      showPage("itinerary");
+      const idx = findTodayIndex();
+      if (idx !== -1) selectItineraryDay(idx);
+    });
+    document.getElementById("gotoFinanceBtn").addEventListener("click", () => {
+      showPage("finance");
+    });
+  }
+
   /* ---------------- 啟動 ---------------- */
   document.addEventListener("DOMContentLoaded", () => {
     initMotionToggle();
@@ -340,6 +397,8 @@
     renderItinerary();
     renderGear();
     renderFinance();
+    renderHomeStatus();
+    initHomeButtons();
     initSnowfall();
   });
 })();

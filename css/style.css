@@ -189,6 +189,35 @@ img, svg { display: block; max-width: 100%; }
 }
 .countdown.is-arrived .countdown__unit { background: var(--coral-soft); }
 
+/* 今日行程橫幅（旅行中首頁） */
+.today-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--coral);
+  border: var(--border-w) solid var(--ink);
+  border-radius: var(--radius-pill);
+  padding: 8px 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.today-banner svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+.btn-outline {
+  display: block;
+  width: 100%;
+  margin-top: 18px;
+  background: #fff;
+  border: var(--border-w) solid var(--ink);
+  border-radius: var(--radius-pill);
+  padding: 12px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: var(--shadow-hard-sm);
+  transition: transform var(--dur-fast);
+}
+.btn-outline:active { transform: translateY(2px); box-shadow: none; }
+
 /* 航班卡片 */
 .flight-card {
   background: var(--mizu-soft);

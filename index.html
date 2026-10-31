@@ -184,26 +184,43 @@
 
     <h1 class="hero__title">北海道賞雪</h1>
     <p class="hero__subtitle">2027/01/02 — 01/09　洞爺湖 ‧ 登別 ‧ 富良野 ‧ 札幌</p>
+  </div>
 
+  <!-- 狀態一：出發前 -->
+  <div id="homeUpcoming">
     <div class="countdown" id="countdown">
       <div class="countdown__unit"><div class="countdown__num" id="cd-days">--</div><div class="countdown__label">天</div></div>
       <div class="countdown__unit"><div class="countdown__num" id="cd-hours">--</div><div class="countdown__label">時</div></div>
       <div class="countdown__unit"><div class="countdown__num" id="cd-mins">--</div><div class="countdown__label">分</div></div>
       <div class="countdown__unit"><div class="countdown__num" id="cd-secs">--</div><div class="countdown__label">秒</div></div>
     </div>
+
+    <div class="section-title"><svg><use href="#icon-flight"/></svg><h2>航班資訊</h2></div>
+    <div id="flightCards"></div>
+
+    <div class="section-title"><svg><use href="#icon-hotel"/></svg><h2>住宿資訊</h2></div>
+    <div class="card">
+      <div class="stay-list" id="stayList"></div>
+    </div>
+
+    <div class="section-title"><svg><use href="#icon-check"/></svg><h2>行前待辦</h2></div>
+    <div class="card">
+      <ul class="checklist" id="checklist"></ul>
+    </div>
   </div>
 
-  <div class="section-title"><svg><use href="#icon-flight"/></svg><h2>航班資訊</h2></div>
-  <div id="flightCards"></div>
-
-  <div class="section-title"><svg><use href="#icon-hotel"/></svg><h2>住宿資訊</h2></div>
-  <div class="card">
-    <div class="stay-list" id="stayList"></div>
+  <!-- 狀態二：旅行中，顯示今天的行程 -->
+  <div id="homeToday" style="display:none;">
+    <div class="today-banner" id="todayBanner"></div>
+    <div id="todayPanelWrap"></div>
+    <button class="btn-outline" id="gotoItineraryBtn">查看完整行程表</button>
   </div>
 
-  <div class="section-title"><svg><use href="#icon-check"/></svg><h2>行前待辦</h2></div>
-  <div class="card">
-    <ul class="checklist" id="checklist"></ul>
+  <!-- 狀態三：旅行結束 -->
+  <div id="homeEnded" class="card" style="display:none;">
+    <div class="section-title"><svg><use href="#icon-onsen"/></svg><h2>旅程圓滿結束</h2></div>
+    <p id="homeEndedText">感謝大家這趟一起出遊！記得到帳務頁核對款項唷。</p>
+    <button class="btn-outline" id="gotoFinanceBtn">前往帳務頁</button>
   </div>
 
 </section>
