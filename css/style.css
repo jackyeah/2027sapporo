@@ -1,0 +1,611 @@
+/* ============================================================
+   北海道賞雪 2027 — 設計系統
+   日系繪本風／可愛簡約／淺色底／平塗無漸層
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Huninn&display=swap');
+
+:root {
+  /* 色票 */
+  --paper: #FFFCF6;
+  --ink: #3E3A39;
+  --coral: #F2A497;
+  --yamabuki: #F6D27A;
+  --mizu: #A8D3E6;
+  --wakatake: #B9DAA5;
+
+  --coral-soft: #FBE2DD;
+  --yamabuki-soft: #FBEBC9;
+  --mizu-soft: #DCEEF5;
+  --wakatake-soft: #E3F0DC;
+
+  --border-w: 3px;
+  --radius-lg: 28px;
+  --radius-md: 20px;
+  --radius-sm: 12px;
+  --radius-pill: 999px;
+
+  --shadow-hard: 4px 4px 0 var(--ink);
+  --shadow-hard-sm: 3px 3px 0 var(--ink);
+
+  --nav-h: 64px;
+
+  --dur-fast: 0.15s;
+  --dur: 0.3s;
+  --dur-slow: 0.6s;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Huninn', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+  padding-top: var(--nav-h);
+}
+
+h1, h2, h3, h4 { margin: 0 0 0.5em; font-weight: 700; }
+
+a { color: inherit; }
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+img, svg { display: block; max-width: 100%; }
+
+.page {
+  display: none;
+  padding: 24px 16px 64px;
+  max-width: 720px;
+  margin: 0 auto;
+  animation: fade-in var(--dur) ease both;
+}
+.page.is-active { display: block; }
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- 頂端固定選單 ---------- */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  background: var(--paper);
+  border-bottom: var(--border-w) solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 100;
+}
+.nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  white-space: nowrap;
+}
+.nav__brand svg { width: 28px; height: 28px; }
+.nav__links {
+  display: flex;
+  gap: 4px;
+}
+.nav__link {
+  border: none;
+  background: transparent;
+  padding: 8px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink);
+  transition: background var(--dur-fast);
+}
+.nav__link.is-active {
+  background: var(--yamabuki);
+  border: 2px solid var(--ink);
+  padding: 6px 10px;
+}
+@media (max-width: 420px) {
+  .nav__link { font-size: 0.75rem; padding: 6px 7px; }
+  .nav__brand span.brand-text { display: none; }
+}
+
+/* ---------- 共用卡片 ---------- */
+.card {
+  background: #fff;
+  border: var(--border-w) solid var(--ink);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-hard);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1rem;
+  margin-bottom: 14px;
+}
+.section-title svg { width: 24px; height: 24px; }
+
+/* ---------- 首頁 ---------- */
+.hero {
+  text-align: center;
+  padding-top: 8px;
+}
+.hero__illustration {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto 8px;
+}
+.hero__illustration svg { width: 100%; height: auto; }
+
+.hero__title {
+  font-size: 1.8rem;
+  margin-bottom: 2px;
+}
+.hero__subtitle {
+  color: #78736f;
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+}
+
+.countdown {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto 20px;
+}
+.countdown__unit {
+  background: var(--mizu-soft);
+  border: var(--border-w) solid var(--ink);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-hard-sm);
+  padding: 10px 6px;
+  min-width: 64px;
+}
+.countdown__num {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.countdown__label {
+  font-size: 0.7rem;
+  margin-top: 4px;
+  color: #6b6560;
+}
+.countdown.is-arrived .countdown__unit { background: var(--coral-soft); }
+
+/* 航班卡片 */
+.flight-card {
+  background: var(--mizu-soft);
+}
+.flight-card__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.flight-card__endpoint { text-align: center; flex: 1; }
+.flight-card__code { font-size: 1.4rem; font-weight: 700; }
+.flight-card__city { font-size: 0.75rem; color: #6b6560; }
+.flight-card__time { font-size: 1rem; font-weight: 700; margin-top: 2px; }
+.flight-card__mid {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: var(--ink);
+}
+.flight-card__mid svg {
+  width: 32px; height: 32px;
+}
+.flight-card__plane-no { font-size: 0.7rem; font-weight: 700; }
+.flight-card__meta {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: #6b6560;
+  border-top: 2px dashed var(--ink);
+  padding-top: 8px;
+}
+.flight-card + .flight-card { margin-top: 12px; }
+
+/* 住宿卡片 */
+.stay-list { display: flex; flex-direction: column; gap: 10px; }
+.stay-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: var(--wakatake-soft);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+}
+.stay-item svg { width: 28px; height: 28px; flex-shrink: 0; }
+.stay-item__date { font-size: 0.75rem; font-weight: 700; color: #4d6b41; }
+.stay-item__name { font-weight: 700; }
+.stay-item__note { font-size: 0.8rem; color: #6b6560; }
+
+/* 待辦清單 */
+.checklist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.checklist__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  user-select: none;
+}
+.checklist__box {
+  width: 22px; height: 22px;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  transition: transform var(--dur-fast);
+}
+.checklist__item.is-checked .checklist__box {
+  background: var(--wakatake);
+}
+.checklist__item.is-checked span.checklist__text {
+  text-decoration: line-through;
+  color: #a39d97;
+}
+.checklist__box svg { width: 14px; height: 14px; opacity: 0; transform: scale(0.5); transition: all var(--dur-fast); }
+.checklist__item.is-checked .checklist__box svg { opacity: 1; transform: scale(1); }
+
+/* ---------- 行程頁 ---------- */
+.day-tabs {
+  display: flex;
+  overflow-x: auto;
+  gap: 8px;
+  padding: 4px 2px 12px;
+  margin-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.day-tabs::-webkit-scrollbar { display: none; }
+.day-tab {
+  flex: 0 0 auto;
+  border: var(--border-w) solid var(--ink);
+  background: #fff;
+  border-radius: var(--radius-pill);
+  padding: 8px 14px;
+  text-align: center;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.day-tab__date { font-size: 0.95rem; }
+.day-tab__weekday { font-size: 0.7rem; color: #6b6560; }
+.day-tab.is-active {
+  background: var(--coral);
+  box-shadow: var(--shadow-hard-sm);
+}
+.day-tab.is-active .day-tab__weekday { color: var(--ink); }
+
+.day-title {
+  font-size: 1.15rem;
+  margin: 4px 0 16px;
+}
+
+.day-panel {
+  animation: day-pop var(--dur) cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes day-pop {
+  0% { opacity: 0; transform: scale(0.96) translateY(6px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.timeline {
+  position: relative;
+  padding-left: 22px;
+  border-left: var(--border-w) dashed var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.timeline__event {
+  position: relative;
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+}
+.timeline__event::before {
+  content: "";
+  position: absolute;
+  left: -29.5px;
+  top: 14px;
+  width: 12px; height: 12px;
+  background: var(--coral);
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+}
+.timeline__event.is-highlight {
+  background: var(--yamabuki-soft);
+}
+.timeline__event.is-highlight::before {
+  background: var(--yamabuki);
+}
+
+.timeline__time {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #6b6560;
+}
+.timeline__place {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-top: 2px;
+}
+.timeline__activity {
+  font-size: 0.9rem;
+  margin-top: 4px;
+  white-space: pre-line;
+}
+.timeline__note {
+  font-size: 0.78rem;
+  color: #8a837c;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed #d8d2c9;
+}
+
+.tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--ink);
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.tag--must { background: var(--coral); }
+
+.timeline__transport {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+.timeline__transport::before {
+  content: "";
+  position: absolute;
+  left: -29.5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px; height: 10px;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+}
+.transport-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--ink);
+  flex-shrink: 0;
+}
+.transport-tag svg { width: 14px; height: 14px; }
+.transport-tag--charter { background: var(--coral-soft); }
+.transport-tag--uber { background: var(--yamabuki-soft); }
+.transport-tag--flight { background: var(--mizu-soft); }
+.transport-tag--walk { background: var(--wakatake-soft); }
+
+/* ---------- 裝備頁 ---------- */
+.gear-group { margin-bottom: 24px; }
+.gear-group__note { font-size: 0.8rem; color: #8a837c; margin: -8px 0 12px; }
+.gear-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.gear-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--mizu-soft);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-sm);
+}
+.gear-group--self .gear-item { background: var(--coral-soft); }
+.gear-item__main { flex: 1; }
+.gear-item__name { font-weight: 700; }
+.gear-item__note { font-size: 0.78rem; color: #6b6560; margin-top: 2px; }
+.gear-item__price { font-weight: 700; white-space: nowrap; font-size: 0.85rem; }
+
+/* ---------- 帳務頁 ---------- */
+.finance-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.finance-tab {
+  flex: 1;
+  border: var(--border-w) solid var(--ink);
+  background: #fff;
+  border-radius: var(--radius-pill);
+  padding: 10px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.finance-tab.is-active {
+  background: var(--wakatake);
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.finance-panel { display: none; }
+.finance-panel.is-active { display: block; }
+
+.expense-note {
+  font-size: 0.78rem;
+  color: #8a837c;
+  margin-bottom: 12px;
+}
+
+.expense-table-wrap {
+  overflow-x: auto;
+  border: var(--border-w) solid var(--ink);
+  border-radius: var(--radius-md);
+  background: #fff;
+}
+table.expense-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+.expense-table th, .expense-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #e8e2d8;
+  text-align: center;
+}
+.expense-table thead th {
+  background: var(--yamabuki-soft);
+  position: sticky;
+  top: 0;
+}
+.expense-table th:first-child, .expense-table td:first-child {
+  position: sticky;
+  left: 0;
+  background: var(--wakatake-soft);
+  font-weight: 700;
+  text-align: left;
+  z-index: 1;
+}
+.expense-table tbody tr:nth-child(odd) td { background-color: #fffaf0; }
+.expense-table tbody tr:nth-child(odd) td:first-child { background-color: var(--wakatake-soft); }
+
+.expense-footnotes {
+  margin-top: 12px;
+  font-size: 0.78rem;
+  color: #6b6560;
+  padding-left: 18px;
+}
+.expense-footnotes li { margin-bottom: 4px; }
+
+.payment-list { display: flex; flex-direction: column; gap: 10px; }
+.payment-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--coral-soft);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-sm);
+}
+.payment-item__category { font-weight: 700; }
+.payment-item__meta { font-size: 0.78rem; color: #6b6560; margin-top: 2px; }
+.payment-item__amount { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.payment-item__amount.is-pending { color: #a39d97; font-size: 0.8rem; font-weight: 400; }
+
+.payer-note {
+  margin-top: 14px;
+  font-size: 0.8rem;
+  background: var(--mizu-soft);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+}
+
+/* ---------- 浮雪裝飾（全站） ---------- */
+.snowfall {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+.snowfall svg {
+  position: absolute;
+  top: -40px;
+  opacity: 0.6;
+  animation: snow-fall linear infinite;
+}
+@keyframes snow-fall {
+  to { transform: translateY(110vh) translateX(10px) rotate(180deg); }
+}
+
+/* ---------- 輕微浮動動畫（插圖） ---------- */
+.float-gentle { animation: float-gentle 4s ease-in-out infinite; }
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.sway-gentle { animation: sway-gentle 5s ease-in-out infinite; transform-origin: bottom center; }
+@keyframes sway-gentle {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
+/* ---------- 減少動態效果 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .snowfall { display: none; }
+}
+body.reduce-motion .float-gentle,
+body.reduce-motion .sway-gentle,
+body.reduce-motion .snowfall,
+body.reduce-motion .day-panel,
+body.reduce-motion .page {
+  animation: none !important;
+}
+
+/* ---------- 減少動態效果切換鈕 ---------- */
+.motion-toggle {
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  z-index: 100;
+  background: #fff;
+  border: var(--border-w) solid var(--ink);
+  border-radius: var(--radius-pill);
+  padding: 8px 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-hard-sm);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.motion-toggle svg { width: 16px; height: 16px; }
+
+footer.site-footer {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #a39d97;
+  padding: 24px 16px 90px;
+}

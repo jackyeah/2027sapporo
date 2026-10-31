@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>北海道賞雪 2027</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='80'%3E%E2%9D%84%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ============================================================
+     SVG 圖示庫（隱藏，透過 <use> 呼叫）
+     ============================================================ -->
+<svg style="position:absolute; width:0; height:0; overflow:hidden;" aria-hidden="true">
+<defs>
+
+<symbol id="icon-mountain" viewBox="0 0 24 24">
+  <path d="M2 19 L9 7 L13 13 L16 9 L22 19 Z" fill="var(--mizu)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M9 7 L10.6 10 L7.4 10 Z" fill="#fff" stroke="var(--ink)" stroke-width="1.2" stroke-linejoin="round"/>
+</symbol>
+
+<symbol id="icon-home" viewBox="0 0 24 24">
+  <path d="M4 11 L12 4 L20 11 V20 H14 V14 H10 V20 H4 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+</symbol>
+
+<symbol id="icon-calendar" viewBox="0 0 24 24">
+  <rect x="3.5" y="5" width="17" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>
+  <path d="M3.5 9.5 H20.5" stroke="currentColor" stroke-width="2"/>
+  <path d="M8 3.5 V6.5 M16 3.5 V6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="8" cy="14" r="1.3" fill="currentColor"/>
+  <circle cx="12" cy="14" r="1.3" fill="currentColor"/>
+</symbol>
+
+<symbol id="icon-gear" viewBox="0 0 24 24">
+  <path d="M8 3 C6 5 6 7 7 9 L5 20 H10 L12 11 L14 20 H19 L17 9 C18 7 18 5 16 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+</symbol>
+
+<symbol id="icon-coin" viewBox="0 0 24 24">
+  <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/>
+  <text x="12" y="16" text-anchor="middle" font-size="10" font-weight="700" fill="currentColor" font-family="sans-serif">¥</text>
+</symbol>
+
+<symbol id="icon-flight" viewBox="0 0 24 24">
+  <path d="M12 2 L13.4 9 L21 12.5 L21 14 L13.4 12.3 L12.8 18.5 L15.3 20.3 L15.3 21.6 L12 20.6 L8.7 21.6 L8.7 20.3 L11.2 18.5 L10.6 12.3 L3 14 L3 12.5 L10.6 9 Z" fill="currentColor" stroke="currentColor" stroke-width="0.6" stroke-linejoin="round"/>
+</symbol>
+
+<symbol id="icon-charter" viewBox="0 0 24 24">
+  <path d="M3 15 V11 L5 7 H16 L19 11 H21 V15 H19" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M3 15 H19" stroke="currentColor" stroke-width="2"/>
+  <circle cx="7" cy="16" r="1.8" fill="#fff" stroke="currentColor" stroke-width="1.8"/>
+  <circle cx="16" cy="16" r="1.8" fill="#fff" stroke="currentColor" stroke-width="1.8"/>
+  <path d="M6 11 H17" stroke="currentColor" stroke-width="1.4"/>
+</symbol>
+
+<symbol id="icon-uber" viewBox="0 0 24 24">
+  <path d="M2 16 L4 10.5 H18 L20 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M2 16 H20 V17.5 H2 Z" fill="currentColor"/>
+  <circle cx="6.5" cy="17.5" r="1.9" fill="#fff" stroke="currentColor" stroke-width="1.6"/>
+  <circle cx="15.5" cy="17.5" r="1.9" fill="#fff" stroke="currentColor" stroke-width="1.6"/>
+  <path d="M6 10.5 L7.5 7 H14.5 L16 10.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+</symbol>
+
+<symbol id="icon-walk" viewBox="0 0 24 24">
+  <circle cx="9" cy="5" r="1.6" fill="currentColor"/>
+  <path d="M9 8 L7 12 L8 17 L7 21" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <circle cx="16" cy="9" r="1.6" fill="currentColor"/>
+  <path d="M16 12 L14.5 16 L16 21" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+</symbol>
+
+<symbol id="icon-hotel" viewBox="0 0 24 24">
+  <path d="M3 20 V8 H21 V20" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M3 13 H21" stroke="currentColor" stroke-width="2"/>
+  <path d="M3 13 C3 10 5 8 8 8 H3 Z" fill="currentColor"/>
+  <rect x="11" y="15.5" width="3" height="4.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+  <circle cx="17" cy="16" r="1.2" fill="currentColor"/>
+</symbol>
+
+<symbol id="icon-snow" viewBox="0 0 24 24">
+  <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+    <path d="M12 2 V22"/>
+    <path d="M3.5 7 L20.5 17"/>
+    <path d="M20.5 7 L3.5 17"/>
+    <path d="M12 2 L9.5 4.5 M12 2 L14.5 4.5"/>
+    <path d="M12 22 L9.5 19.5 M12 22 L14.5 19.5"/>
+  </g>
+</symbol>
+
+<symbol id="icon-check" viewBox="0 0 24 24">
+  <path d="M4 13 L9.5 18.5 L20 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+
+<symbol id="icon-motion" viewBox="0 0 24 24">
+  <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+  <path d="M12 7 V12 L15.5 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</symbol>
+
+<symbol id="icon-ski" viewBox="0 0 24 24">
+  <circle cx="12" cy="5" r="1.8" fill="currentColor"/>
+  <path d="M12 7.5 V14 L8 19 M12 14 L16 19" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M5 20 H10 M14 20 H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</symbol>
+
+<symbol id="icon-onsen" viewBox="0 0 24 24">
+  <path d="M4 14 C4 10 7 9 7 6 C7 8 9 9 9 11 C9 9 11 8 11 5 C11 8 13 9 13 11 C13 9 15 8 15 6 C15 9 18 10 18 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="11" cy="18" rx="8" ry="3" fill="none" stroke="currentColor" stroke-width="2"/>
+</symbol>
+
+</defs>
+</svg>
+
+<!-- 背景浮雪 -->
+<div class="snowfall" id="snowfall" aria-hidden="true"></div>
+
+<!-- ============================================================
+     頂端固定選單
+     ============================================================ -->
+<nav class="nav">
+  <div class="nav__brand">
+    <svg><use href="#icon-mountain"/></svg>
+    <span class="brand-text">北海道賞雪 2027</span>
+  </div>
+  <div class="nav__links" id="navLinks">
+    <button class="nav__link" data-page="home">首頁</button>
+    <button class="nav__link" data-page="itinerary">行程</button>
+    <button class="nav__link" data-page="gear">裝備</button>
+    <button class="nav__link" data-page="finance">帳務</button>
+  </div>
+</nav>
+
+<!-- ============================================================
+     首頁
+     ============================================================ -->
+<main>
+<section class="page" id="page-home" data-page="home">
+
+  <div class="hero">
+    <div class="hero__illustration">
+      <!-- 手繪風景：羊蹄山、松樹、JR 列車、飄雪 -->
+      <svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <!-- 天空 -->
+        <rect x="0" y="0" width="400" height="260" rx="28" fill="var(--mizu-soft)"/>
+        <!-- 遠山 -->
+        <path d="M-10 170 L70 90 L150 170 Z" fill="var(--wakatake-soft)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/>
+        <!-- 羊蹄山（主山，輕輕浮動） -->
+        <g class="float-gentle">
+          <path d="M120 180 L205 55 L290 180 Z" fill="#fff" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M205 55 L222 85 L188 85 Z" fill="var(--mizu)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M160 140 L185 110 L198 125 L225 100 L250 140 Z" fill="var(--mizu-soft)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round" opacity="0.7"/>
+        </g>
+        <!-- 右側小山 -->
+        <path d="M260 180 L330 110 L400 180 Z" fill="var(--wakatake-soft)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/>
+        <!-- 地面 -->
+        <path d="M0 190 Q200 170 400 192 V260 H0 Z" fill="#fff" stroke="var(--ink)" stroke-width="3"/>
+        <!-- 松樹 x3 -->
+        <g class="sway-gentle">
+          <path d="M55 215 L70 185 L85 215 Z" fill="var(--wakatake)" stroke="var(--ink)" stroke-width="2.2" stroke-linejoin="round"/>
+          <path d="M60 225 L70 203 L80 225 Z" fill="var(--wakatake)" stroke="var(--ink)" stroke-width="2.2" stroke-linejoin="round"/>
+          <rect x="67" y="225" width="6" height="8" fill="#B08968" stroke="var(--ink)" stroke-width="1.6"/>
+        </g>
+        <g class="sway-gentle" style="animation-delay: -1.5s">
+          <path d="M325 222 L338 196 L351 222 Z" fill="var(--wakatake)" stroke="var(--ink)" stroke-width="2.2" stroke-linejoin="round"/>
+          <rect x="334" y="222" width="6" height="8" fill="#B08968" stroke="var(--ink)" stroke-width="1.6"/>
+        </g>
+        <!-- JR 可愛列車 -->
+        <g class="float-gentle" style="animation-delay: -2s">
+          <rect x="140" y="205" width="90" height="30" rx="10" fill="var(--coral)" stroke="var(--ink)" stroke-width="2.5"/>
+          <rect x="150" y="212" width="18" height="14" rx="3" fill="#fff" stroke="var(--ink)" stroke-width="1.8"/>
+          <rect x="174" y="212" width="18" height="14" rx="3" fill="#fff" stroke="var(--ink)" stroke-width="1.8"/>
+          <rect x="198" y="212" width="18" height="14" rx="3" fill="#fff" stroke="var(--ink)" stroke-width="1.8"/>
+          <circle cx="155" cy="238" r="5" fill="var(--ink)"/>
+          <circle cx="215" cy="238" r="5" fill="var(--ink)"/>
+        </g>
+        <!-- 飄雪 -->
+        <g fill="#fff" stroke="var(--ink)" stroke-width="1">
+          <circle cx="40" cy="40" r="3"/>
+          <circle cx="340" cy="60" r="3.5"/>
+          <circle cx="100" cy="30" r="2.5"/>
+          <circle cx="280" cy="40" r="2.5"/>
+          <circle cx="370" cy="120" r="3"/>
+        </g>
+      </svg>
+    </div>
+
+    <h1 class="hero__title">北海道賞雪</h1>
+    <p class="hero__subtitle">2027/01/02 — 01/09　洞爺湖 ‧ 登別 ‧ 富良野 ‧ 札幌</p>
+
+    <div class="countdown" id="countdown">
+      <div class="countdown__unit"><div class="countdown__num" id="cd-days">--</div><div class="countdown__label">天</div></div>
+      <div class="countdown__unit"><div class="countdown__num" id="cd-hours">--</div><div class="countdown__label">時</div></div>
+      <div class="countdown__unit"><div class="countdown__num" id="cd-mins">--</div><div class="countdown__label">分</div></div>
+      <div class="countdown__unit"><div class="countdown__num" id="cd-secs">--</div><div class="countdown__label">秒</div></div>
+    </div>
+  </div>
+
+  <div class="section-title"><svg><use href="#icon-flight"/></svg><h2>航班資訊</h2></div>
+  <div id="flightCards"></div>
+
+  <div class="section-title"><svg><use href="#icon-hotel"/></svg><h2>住宿資訊</h2></div>
+  <div class="card">
+    <div class="stay-list" id="stayList"></div>
+  </div>
+
+  <div class="section-title"><svg><use href="#icon-check"/></svg><h2>行前待辦</h2></div>
+  <div class="card">
+    <ul class="checklist" id="checklist"></ul>
+  </div>
+
+</section>
+
+<!-- ============================================================
+     行程頁
+     ============================================================ -->
+<section class="page" id="page-itinerary" data-page="itinerary">
+  <div class="section-title"><svg><use href="#icon-calendar"/></svg><h2>每日行程</h2></div>
+  <div class="day-tabs" id="dayTabs"></div>
+  <div id="dayPanelWrap"></div>
+</section>
+
+<!-- ============================================================
+     裝備頁
+     ============================================================ -->
+<section class="page" id="page-gear" data-page="gear">
+  <div class="section-title"><svg><use href="#icon-gear"/></svg><h2>滑雪裝備清單</h2></div>
+  <div id="gearContent"></div>
+</section>
+
+<!-- ============================================================
+     帳務頁
+     ============================================================ -->
+<section class="page" id="page-finance" data-page="finance">
+  <div class="section-title"><svg><use href="#icon-coin"/></svg><h2>帳務透明公開</h2></div>
+
+  <div class="finance-tabs">
+    <button class="finance-tab is-active" data-finance="expense">金額紀錄</button>
+    <button class="finance-tab" data-finance="payment">繳費紀錄</button>
+  </div>
+
+  <div class="finance-panel is-active" id="panel-expense">
+    <p class="expense-note">每人分攤明細，保留原始幣別（¥ / $），未自動換算加總，避免匯率誤差。</p>
+    <div class="expense-table-wrap">
+      <table class="expense-table" id="expenseTable"></table>
+    </div>
+    <ul class="expense-footnotes" id="expenseFootnotes"></ul>
+  </div>
+
+  <div class="finance-panel" id="panel-payment">
+    <div class="payer-note">主揪先代墊付款項目，公開讓大家知道錢花到哪裡去了。</div>
+    <div class="payment-list" id="paymentList" style="margin-top: 14px;"></div>
+  </div>
+</section>
+</main>
+
+<button class="motion-toggle" id="motionToggle" title="切換減少動態效果">
+  <svg><use href="#icon-motion"/></svg>
+  <span id="motionToggleLabel">減少動態</span>
+</button>
+
+<footer class="site-footer">北海道賞雪 2027 ‧ 行程如有更動請以最新版本為準</footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
