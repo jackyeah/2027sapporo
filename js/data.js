@@ -65,6 +65,7 @@ const TRIP_DATA = {
       date: "1/2",
       weekday: "六",
       title: "出發日．飛往北海道",
+      scene: "scene-toya",
       items: [
         { time: "7:00", place: "台中清泉崗機場", activity: "登機手續" },
         { type: "transport", transport: "flight", label: "JX318　【RMQ】09:00 起飛 → 【CTS】15:55 抵達", note: "入關手續，可能需要排隊等候" },
@@ -79,6 +80,7 @@ const TRIP_DATA = {
       date: "1/3",
       weekday: "日",
       title: "洞爺湖 → 登別地獄谷",
+      scene: "scene-jigokudani",
       items: [
         { time: "7:00-9:00", place: "洞爺湖畔亭飯店", activity: "飯店早餐" },
         { time: "10:00", place: "洞爺湖畔亭飯店", activity: "退房" },
@@ -97,6 +99,7 @@ const TRIP_DATA = {
       date: "1/4",
       weekday: "一",
       title: "移動日．前進富良野雪場",
+      scene: "scene-travel",
       items: [
         { time: "7:00-9:00", place: "Mahoroba", activity: "飯店早餐" },
         { time: "9:30", place: "Mahoroba", activity: "Check out" },
@@ -112,6 +115,7 @@ const TRIP_DATA = {
       date: "1/5",
       weekday: "二",
       title: "富良野滑雪 Day 1",
+      scene: "scene-snowboard-1",
       items: [
         { time: "08:00-09:00", place: "Bestdayever", activity: "起床吃早餐" },
         { type: "transport", transport: "uber", label: "搭 Uber 前往「北の峰」，車程 10 分鐘" },
@@ -124,6 +128,7 @@ const TRIP_DATA = {
       date: "1/6",
       weekday: "三",
       title: "富良野滑雪 Day 2",
+      scene: "scene-snowboard-2",
       items: [
         { time: "08:00-09:00", place: "Bestdayever", activity: "起床吃早餐" },
         { type: "transport", transport: "uber", label: "搭 Uber 前往「北の峰」，車程 10 分鐘" },
@@ -136,6 +141,7 @@ const TRIP_DATA = {
       date: "1/7",
       weekday: "四",
       title: "富良野滑雪 Day 3 → 移動札幌薄野",
+      scene: "scene-snowboard-3",
       items: [
         { time: "08:00-09:00", place: "Bestdayever", activity: "起床吃早餐" },
         { type: "transport", transport: "uber", label: "搭 Uber 前往「北の峰」，車程 10 分鐘" },
@@ -158,6 +164,7 @@ const TRIP_DATA = {
       date: "1/8",
       weekday: "五",
       title: "自由活動日（規劃中）",
+      scene: "scene-tbd",
       items: [
         { time: "", place: "小樽？", activity: "行程待規劃", note: "這天目前還是空白，大家一起討論想去哪" }
       ]
@@ -166,6 +173,7 @@ const TRIP_DATA = {
       date: "1/9",
       weekday: "六",
       title: "賦歸日",
+      scene: "scene-flight-home",
       items: [
         { time: "9:00", place: "東橫INN 北海道札幌站南口", activity: "Check out" },
         { time: "9:30", place: "", activity: "吃早餐" },

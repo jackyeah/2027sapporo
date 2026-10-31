@@ -253,6 +253,11 @@
 
     return `
       <div class="day-panel">
+        ${day.scene ? `
+          <div class="day-scene">
+            <svg class="float-gentle"><use href="#${day.scene}"/></svg>
+          </div>
+        ` : ""}
         <h3 class="day-title">${day.date} (${day.weekday})　${day.title}</h3>
         <div class="timeline">${itemsHtml}</div>
       </div>

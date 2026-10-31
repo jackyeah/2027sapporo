@@ -426,6 +426,20 @@ img, svg { display: block; max-width: 100%; }
 }
 .day-tab.is-active .day-tab__weekday { color: var(--ink); }
 
+.day-scene {
+  border: var(--border-w) solid var(--ink);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-hard-sm);
+  overflow: hidden;
+  margin-bottom: 14px;
+  line-height: 0;
+}
+.day-scene svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 .day-title {
   font-size: 1.15rem;
   margin: 4px 0 16px;
