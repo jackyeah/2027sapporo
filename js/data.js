@@ -9,6 +9,8 @@
 const PEOPLE = [
   { id: "awei", name: "阿緯", fullName: "葉俊緯", avatar: "avatar-awei", color: "mizu" },
   { id: "yunting", name: "云婷", fullName: "鄭云婷", avatar: "avatar-yunting", color: "coral" },
+  { id: "yunting1", name: "云婷1", fullName: "鄭云婷", avatar: "avatar-yunting", color: "mizu" },
+  { id: "yunting2", name: "云婷2", fullName: "鄭云婷", avatar: "avatar-yunting-2", color: "coral" },
   { id: "zhiyang", name: "致養", fullName: "吳致養", avatar: "avatar-generic", color: "yamabuki" },
   { id: "shengzhao", name: "陞漜", fullName: "黃陞漜", avatar: "avatar-generic", color: "wakatake" },
   { id: "fengwei", name: "鋒瑋", fullName: "陳鋒瑋", avatar: "avatar-generic", color: "coral" },
