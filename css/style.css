@@ -509,6 +509,48 @@ img, svg { display: block; max-width: 100%; }
   border-top: 1px dashed #d8d2c9;
 }
 
+.timeline__stops {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.timeline__stops li {
+  position: relative;
+  padding-left: 22px;
+  font-size: 0.85rem;
+  counter-increment: stop-count;
+}
+.timeline__stops {
+  counter-reset: stop-count;
+}
+.timeline__stops li::before {
+  content: counter(stop-count);
+  position: absolute;
+  left: 0;
+  top: 0.5px;
+  width: 16px;
+  height: 16px;
+  line-height: 14px;
+  text-align: center;
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: var(--yamabuki);
+  border: 1.6px solid var(--ink);
+  border-radius: 50%;
+}
+.timeline__stops li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 7.3px;
+  top: 17px;
+  width: 1.6px;
+  height: calc(100% - 13px);
+  background: #d8d2c9;
+}
+
 .tag {
   display: inline-block;
   font-size: 0.7rem;
@@ -555,6 +597,85 @@ img, svg { display: block; max-width: 100%; }
 .transport-tag--uber { background: var(--yamabuki-soft); }
 .transport-tag--flight { background: var(--mizu-soft); }
 .transport-tag--walk { background: var(--wakatake-soft); }
+.transport-tag--ride { background: var(--wakatake-soft); }
+
+/* ---------- 美食頁 ---------- */
+.food-page-note {
+  font-size: 0.8rem;
+  color: #8a837c;
+  margin: -8px 0 16px;
+}
+.food-region-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.food-region-tab {
+  flex: 1;
+  border: var(--border-w) solid var(--ink);
+  background: #fff;
+  border-radius: var(--radius-pill);
+  padding: 10px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.food-region-tab.is-active {
+  background: var(--wakatake);
+  box-shadow: var(--shadow-hard-sm);
+}
+.food-empty-note {
+  font-size: 0.85rem;
+  color: #8a837c;
+  text-align: center;
+  padding: 32px 0;
+}
+.food-group { margin-bottom: 24px; }
+.food-group__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+.food-group__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  flex-shrink: 0;
+}
+.food-group__dot--yamabuki { background: var(--yamabuki); }
+.food-group__dot--coral { background: var(--coral); }
+.food-group__dot--mizu { background: var(--mizu); }
+.food-group__dot--wakatake { background: var(--wakatake); }
+.food-group__dot--neutral { background: #D8D2C9; }
+
+.food-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+.food-card {
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+}
+.food-card--yamabuki { background: var(--yamabuki-soft); }
+.food-card--coral { background: var(--coral-soft); }
+.food-card--mizu { background: var(--mizu-soft); }
+.food-card--wakatake { background: var(--wakatake-soft); }
+.food-card--neutral { background: #F0EEE8; border-style: dashed; }
+.food-card__name {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.food-card__desc {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #4a4542;
+}
 
 /* ---------- 裝備頁 ---------- */
 .gear-group { margin-bottom: 24px; }
@@ -704,6 +825,41 @@ table.expense-table {
 @keyframes sway-gentle {
   0%, 100% { transform: rotate(-2deg); }
   50% { transform: rotate(2deg); }
+}
+
+/* ---------- 1/2 洞爺湖過場動畫：台灣起飛 → 北海道抵達 → 夜晚洞爺湖 ---------- */
+.toya-fade-out-early { animation: toya-fade-out-early 9s ease-in-out forwards; }
+@keyframes toya-fade-out-early {
+  0%, 28% { opacity: 1; }
+  38%, 100% { opacity: 0; }
+}
+.toya-fade-mid { animation: toya-fade-mid 9s ease-in-out forwards; }
+@keyframes toya-fade-mid {
+  0%, 28% { opacity: 0; }
+  38%, 62% { opacity: 1; }
+  72%, 100% { opacity: 0; }
+}
+.toya-fade-mid-path { animation: toya-fade-mid-path 9s ease-in-out forwards; }
+@keyframes toya-fade-mid-path {
+  0%, 62% { opacity: 1; }
+  72%, 100% { opacity: 0; }
+}
+.toya-fade-in-final { animation: toya-fade-in-final 9s ease-in-out forwards; }
+@keyframes toya-fade-in-final {
+  0%, 62% { opacity: 0; }
+  72%, 100% { opacity: 1; }
+}
+
+/* ---------- 1/3 過場動畫：白天洞爺湖 → 登別地獄谷 ---------- */
+.jigoku-fade-out-early { animation: jigoku-fade-out-early 7s ease-in-out forwards; }
+@keyframes jigoku-fade-out-early {
+  0%, 45% { opacity: 1; }
+  58%, 100% { opacity: 0; }
+}
+.jigoku-fade-in-final { animation: jigoku-fade-in-final 7s ease-in-out forwards; }
+@keyframes jigoku-fade-in-final {
+  0%, 45% { opacity: 0; }
+  58%, 100% { opacity: 1; }
 }
 
 /* ---------- 減少動態效果 ---------- */

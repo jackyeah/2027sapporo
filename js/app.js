@@ -121,7 +121,7 @@
     links.forEach(l => l.addEventListener("click", () => show(l.dataset.page)));
 
     const initial = (location.hash || "#home").replace("#", "");
-    const valid = ["home", "itinerary", "gear", "finance"].includes(initial) ? initial : "home";
+    const valid = ["home", "itinerary", "food", "gear", "finance"].includes(initial) ? initial : "home";
     show(valid);
   }
 
@@ -246,6 +246,11 @@
           ${item.time ? `<div class="timeline__time">${item.time}</div>` : ""}
           <div class="timeline__place">${item.place || ""}${item.highlight ? '<span class="tag tag--must">必去</span>' : ""}</div>
           <div class="timeline__activity">${item.activity || ""}</div>
+          ${item.stops ? `
+            <ol class="timeline__stops">
+              ${item.stops.map(s => `<li>${s}</li>`).join("")}
+            </ol>
+          ` : ""}
           ${item.note ? `<div class="timeline__note">${item.note}</div>` : ""}
         </div>
       `;
@@ -343,6 +348,54 @@
       // 出發前
       upcoming.style.display = "block";
     }
+  }
+
+  /* ---------------- 美食頁 ---------------- */
+  let activeFoodRegion = null;
+
+  function renderFood() {
+    const regions = TRIP_DATA.foodOptions.regions;
+    const tabsWrap = document.getElementById("foodRegionTabs");
+    if (!activeFoodRegion) activeFoodRegion = regions[0].id;
+
+    tabsWrap.innerHTML = regions.map(region => `
+      <button class="food-region-tab${region.id === activeFoodRegion ? " is-active" : ""}" data-region="${region.id}">${region.label}</button>
+    `).join("");
+
+    tabsWrap.querySelectorAll(".food-region-tab").forEach(btn => {
+      btn.addEventListener("click", () => {
+        activeFoodRegion = btn.dataset.region;
+        renderFood();
+      });
+    });
+
+    renderFoodContent();
+  }
+
+  function renderFoodContent() {
+    const wrap = document.getElementById("foodContent");
+    const region = TRIP_DATA.foodOptions.regions.find(r => r.id === activeFoodRegion);
+
+    if (!region.groups.length) {
+      wrap.innerHTML = `<p class="food-empty-note">還沒有名單，大家一起討論想吃什麼～</p>`;
+      return;
+    }
+
+    wrap.innerHTML = region.groups.map(group => `
+      <div class="food-group">
+        <div class="food-group__title">
+          <span class="food-group__dot food-group__dot--${group.color}"></span>${group.category}
+        </div>
+        <div class="food-list">
+          ${group.items.map(it => `
+            <div class="food-card food-card--${group.color}">
+              <div class="food-card__name">${it.name}</div>
+              <div class="food-card__desc">${it.desc}</div>
+            </div>
+          `).join("")}
+        </div>
+      </div>
+    `).join("");
   }
 
   /* ---------------- 裝備頁 ---------------- */
@@ -487,6 +540,7 @@
     renderStays();
     renderChecklist();
     renderItinerary();
+    renderFood();
     renderGear();
     renderFinance();
     renderHomeStatus();
