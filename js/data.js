@@ -4,6 +4,18 @@
    金額，直接改這裡的物件即可，不需要碰 HTML。
    ============================================================ */
 
+/* 旅伴名單：id 對應 localStorage 存的身份、avatar 對應 SVG symbol、
+   color 對應 CSS 變數（珊瑚粉/山吹黃/水色/若竹綠），用來上色 Q 版人物的衣服 */
+const PEOPLE = [
+  { id: "awei", name: "阿緯", fullName: "葉俊緯", avatar: "avatar-awei", color: "mizu" },
+  { id: "yunting", name: "云婷", fullName: "鄭云婷", avatar: "avatar-yunting", color: "coral" },
+  { id: "zhiyang", name: "致養", fullName: "吳致養", avatar: "avatar-generic", color: "yamabuki" },
+  { id: "shengzhao", name: "陞漜", fullName: "黃陞漜", avatar: "avatar-generic", color: "wakatake" },
+  { id: "fengwei", name: "鋒瑋", fullName: "陳鋒瑋", avatar: "avatar-generic", color: "coral" },
+  { id: "haidi", name: "海蒂", fullName: "劉海蒂", avatar: "avatar-generic", color: "mizu-soft" },
+  { id: "simin", name: "思旻", fullName: "吳思旻", avatar: "avatar-generic", color: "yamabuki-soft" }
+];
+
 const TRIP_DATA = {
   title: "北海道賞雪",
   subtitle: "2027 冬 · 洞爺湖 · 登別 · 富良野 · 札幌",

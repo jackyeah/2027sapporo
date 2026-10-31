@@ -9,6 +9,79 @@
 
   let showPage = () => {};       // 由 initNav 賦值，供跨函式切換頁面
   let selectItineraryDay = () => {}; // 由 renderItinerary 賦值，供首頁「查看完整行程」按鈕使用
+  let refreshPersonalization = () => {}; // 由各 render 函式賦值，供切換身份後即時更新畫面
+
+  const IDENTITY_KEY = "myIdentity";
+
+  function getMyIdentity() {
+    const id = localStorage.getItem(IDENTITY_KEY);
+    return PEOPLE.find(p => p.id === id) || null;
+  }
+
+  /* ---------------- 身份選擇 ---------------- */
+  function initIdentity() {
+    const modal = document.getElementById("identityModal");
+    const grid = document.getElementById("identityGrid");
+    const skipBtn = document.getElementById("identitySkipBtn");
+    const navBtn = document.getElementById("navAvatarBtn");
+    const navIcon = document.getElementById("navAvatarIcon");
+    const companionWrap = document.getElementById("heroCompanion");
+    const companionAvatar = document.getElementById("heroCompanionAvatar");
+    const companionText = document.getElementById("heroCompanionText");
+
+    grid.innerHTML = PEOPLE.map(p => `
+      <button class="identity-option" data-id="${p.id}">
+        <svg style="--accent: var(--${p.color});"><use href="#${p.avatar}"/></svg>
+        <span class="identity-option__name">${p.name}</span>
+      </button>
+    `).join("");
+
+    function applyIdentity(person) {
+      if (!person) {
+        navIcon.innerHTML = `<use href="#avatar-generic"/>`;
+        companionWrap.style.display = "none";
+        return;
+      }
+      navIcon.innerHTML = `<use href="#${person.avatar}"/>`;
+      navIcon.style.setProperty("--accent", `var(--${person.color})`);
+      companionAvatar.innerHTML = `<use href="#${person.avatar}"/>`;
+      companionAvatar.style.setProperty("--accent", `var(--${person.color})`);
+      companionText.textContent = `嗨，${person.name}！一起出發吧`;
+      companionWrap.style.display = "flex";
+    }
+
+    function openModal() {
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+      const current = getMyIdentity();
+      grid.querySelectorAll(".identity-option").forEach(btn => {
+        btn.classList.toggle("is-selected", current && btn.dataset.id === current.id);
+      });
+    }
+    function closeModal() {
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+    }
+
+    grid.querySelectorAll(".identity-option").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const person = PEOPLE.find(p => p.id === btn.dataset.id);
+        localStorage.setItem(IDENTITY_KEY, person.id);
+        applyIdentity(person);
+        closeModal();
+        refreshPersonalization();
+      });
+    });
+
+    skipBtn.addEventListener("click", closeModal);
+    navBtn.addEventListener("click", openModal);
+
+    applyIdentity(getMyIdentity());
+
+    if (!localStorage.getItem(IDENTITY_KEY)) {
+      openModal();
+    }
+  }
 
   /* ---------------- 減少動態效果 ---------------- */
   function initMotionToggle() {
@@ -137,6 +210,10 @@
         <span class="checklist__text">${item}</span>
       </li>
     `).join("");
+
+    const me = getMyIdentity();
+    const titleEl = document.getElementById("checklistTitle");
+    if (titleEl) titleEl.textContent = me ? `${me.name} 的行前待辦` : "行前待辦";
 
     wrap.querySelectorAll(".checklist__item").forEach(li => {
       li.addEventListener("click", () => {
@@ -291,6 +368,14 @@
     wrap.innerHTML = groupHtml(g.rental, "gear-group--rental") + groupHtml(g.selfPrepare, "gear-group--self");
   }
 
+  /* ---------------- 帳務頁：標出自己的那一列 ---------------- */
+  function highlightMyExpenseRow() {
+    const me = getMyIdentity();
+    document.querySelectorAll("#expenseTable tbody tr").forEach(tr => {
+      tr.classList.toggle("is-me-row", !!me && tr.dataset.name === me.fullName);
+    });
+  }
+
   /* ---------------- 帳務頁 ---------------- */
   function renderFinance() {
     const table = document.getElementById("expenseTable");
@@ -320,7 +405,7 @@
     const tbody = `
       <tbody>
         ${TRIP_DATA.expenses.map(row => `
-          <tr>
+          <tr data-name="${row.name}">
             <td>${row.name}</td>
             ${cols.map(c => `<td>${row[c.key] || "—"}</td>`).join("")}
           </tr>
@@ -329,6 +414,7 @@
     `;
 
     table.innerHTML = thead + tbody;
+    highlightMyExpenseRow();
 
     document.getElementById("expenseFootnotes").innerHTML =
       TRIP_DATA.expenseFootnotes.map(f => `<li>${f}</li>`).join("");
@@ -389,6 +475,7 @@
   /* ---------------- 啟動 ---------------- */
   document.addEventListener("DOMContentLoaded", () => {
     initMotionToggle();
+    initIdentity();
     initNav();
     initCountdown();
     renderFlights();
@@ -400,5 +487,10 @@
     renderHomeStatus();
     initHomeButtons();
     initSnowfall();
+
+    refreshPersonalization = () => {
+      renderChecklist();
+      highlightMyExpenseRow();
+    };
   });
 })();
