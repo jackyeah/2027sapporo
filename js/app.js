@@ -264,10 +264,29 @@
   }
 
   /* ---------------- 共用：把單一天的資料轉成時間軸 HTML ---------------- */
+  let activeDayPlan = {};
+
   function buildTimelineHtml(day) {
     const meta = TRIP_DATA.transportMeta;
+    const hasPlans = Array.isArray(day.plans);
+    let items = day.items;
+    let planTabsHtml = "";
 
-    const itemsHtml = day.items.map(item => {
+    if (hasPlans) {
+      if (!activeDayPlan[day.date]) activeDayPlan[day.date] = day.plans[0].id;
+      const activePlan = day.plans.find(p => p.id === activeDayPlan[day.date]) || day.plans[0];
+      items = activePlan.items;
+      planTabsHtml = `
+        <div class="day-plan-tabs">
+          ${day.plans.map(p => `
+            <button class="day-plan-tab${p.id === activePlan.id ? " is-active" : ""}" data-plan-id="${p.id}">${p.label}</button>
+          `).join("")}
+        </div>
+        ${day.planNote ? `<div class="day-plan-note">${day.planNote}</div>` : ""}
+      `;
+    }
+
+    const itemsHtml = items.map(item => {
       if (item.type === "transport") {
         const m = meta[item.transport] || { label: item.transport, color: "coral" };
         return `
@@ -282,29 +301,59 @@
       return `
         <div class="timeline__event ${item.highlight ? "is-highlight" : ""}">
           ${item.time ? `<div class="timeline__time">${item.time}</div>` : ""}
-          <div class="timeline__place">${item.place || ""}${item.highlight ? '<span class="tag tag--must">必去</span>' : ""}</div>
+          <div class="timeline__place">${item.place || ""}${item.highlight ? '<span class="tag tag--must">必去</span>' : ""}${(item.people || []).map(pid => {
+            const p = PEOPLE.find(person => person.id === pid);
+            return p ? `<span class="tag tag--person" style="background:var(--${p.color})">${p.name}專屬</span>` : "";
+          }).join("")}</div>
           <div class="timeline__activity">${item.activity || ""}</div>
           ${item.stops ? `
             <ol class="timeline__stops">
-              ${item.stops.map(s => `<li>${s}</li>`).join("")}
+              ${item.stops.map(s => typeof s === "string"
+                ? `<li>${s}</li>`
+                : `<li>${s.name}${s.map ? ` <a href="${s.map}" target="_blank" rel="noopener">Google 地圖</a>` : ""}</li>`
+              ).join("")}
             </ol>
           ` : ""}
-          ${item.note ? `<div class="timeline__note">${item.note}</div>` : ""}
+          ${item.note ? `
+            <div class="timeline__note">
+              ${item.note}
+              ${item.foodLink ? `
+                <button class="timeline__food-link" data-food-region="${item.foodLink}" title="前往美食清單">
+                  <svg><use href="#icon-food"/></svg>
+                </button>
+              ` : ""}
+            </div>
+          ` : ""}
         </div>
       `;
     }).join("");
 
     return `
-      <div class="day-panel">
+      <div class="day-panel" data-day-date="${day.date}">
         ${day.scene ? `
           <div class="day-scene">
             <svg class="float-gentle"><use href="#${day.scene}"/></svg>
           </div>
         ` : ""}
         <h3 class="day-title">${day.date} (${day.weekday})　${day.title}</h3>
+        ${planTabsHtml}
         <div class="timeline">${itemsHtml}</div>
       </div>
     `;
+  }
+
+  function initDayPlanTabs() {
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest(".day-plan-tab");
+      if (!btn) return;
+      const panel = btn.closest(".day-panel");
+      if (!panel) return;
+      const date = panel.dataset.dayDate;
+      const day = TRIP_DATA.days.find(d => d.date === date);
+      if (!day) return;
+      activeDayPlan[date] = btn.dataset.planId;
+      panel.parentElement.innerHTML = buildTimelineHtml(day);
+    });
   }
 
   /* ---------------- 行程頁：日期 tab + 時間軸 ---------------- */
@@ -427,13 +476,30 @@
         <div class="food-list">
           ${group.items.map(it => `
             <div class="food-card food-card--${group.color}">
-              <div class="food-card__name">${it.name}</div>
+              <div class="food-card__head">
+                <div class="food-card__name">${it.name}</div>
+                ${buildFoodMapLinks(it)}
+              </div>
               <div class="food-card__desc">${it.desc}</div>
             </div>
           `).join("")}
         </div>
       </div>
     `).join("");
+  }
+
+  function buildFoodMapLinks(it) {
+    const links = it.maps || (it.map ? [it.map] : []);
+    if (!links.length) return "";
+    return `
+      <span class="food-card__maps">
+        ${links.map((url, i) => `
+          <a class="food-card__map-link" href="${url}" target="_blank" rel="noopener" title="在 Google 地圖開啟${links.length > 1 ? `（${i + 1}）` : ""}">
+            <svg><use href="#icon-map-pin"/></svg>
+          </a>
+        `).join("")}
+      </span>
+    `;
   }
 
   /* ---------------- 裝備頁 ---------------- */
@@ -468,7 +534,7 @@
   function highlightMyExpenseRow() {
     const me = getMyIdentity();
     document.querySelectorAll("#expenseTable tbody tr").forEach(tr => {
-      tr.classList.toggle("is-me-row", !!me && tr.dataset.name === me.fullName);
+      tr.classList.toggle("is-me-row", !!me && tr.dataset.name === me.name);
     });
   }
 
@@ -479,10 +545,10 @@
 
     const thead = `
       <thead>
-        <tr><th rowspan="2">姓名</th>${
+        <tr><th class="th-name" rowspan="2">姓名</th>${
           groupHeader(cols)
         }</tr>
-        <tr>${cols.map(c => `<th>${c.label}</th>`).join("")}</tr>
+        <tr>${cols.map(c => `<th data-group="${c.group}">${c.label}</th>`).join("")}</tr>
       </thead>
     `;
 
@@ -495,7 +561,7 @@
           groups.push({ name: c.group, span: 1 });
         }
       });
-      return groups.map(g => `<th colspan="${g.span}">${g.name}</th>`).join("");
+      return groups.map(g => `<th colspan="${g.span}" data-group="${g.name}">${g.name}</th>`).join("");
     }
 
     const tbody = `
@@ -503,7 +569,7 @@
         ${TRIP_DATA.expenses.map(row => `
           <tr data-name="${row.name}">
             <td>${row.name}</td>
-            ${cols.map(c => `<td>${row[c.key] || "—"}</td>`).join("")}
+            ${cols.map(c => `<td data-group="${c.group}">${row[c.key] || "—"}</td>`).join("")}
           </tr>
         `).join("")}
       </tbody>
@@ -556,6 +622,17 @@
     }
   }
 
+  /* ---------------- 行程跳轉美食清單 ---------------- */
+  function initFoodLinks() {
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest(".timeline__food-link");
+      if (!btn) return;
+      activeFoodRegion = btn.dataset.foodRegion;
+      showPage("food");
+      renderFood();
+    });
+  }
+
   /* ---------------- 首頁按鈕 ---------------- */
   function initHomeButtons() {
     document.getElementById("gotoItineraryBtn").addEventListener("click", () => {
@@ -583,6 +660,8 @@
     renderFinance();
     renderHomeStatus();
     initHomeButtons();
+    initFoodLinks();
+    initDayPlanTabs();
     initSnowfall();
 
     refreshPersonalization = () => {

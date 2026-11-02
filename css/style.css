@@ -458,6 +458,30 @@ img, svg { display: block; max-width: 100%; }
   100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
+.day-plan-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.day-plan-tab {
+  flex: 1;
+  border: var(--border-w) solid var(--ink);
+  background: #fff;
+  border-radius: var(--radius-pill);
+  padding: 8px 10px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.day-plan-tab.is-active {
+  background: var(--mizu-soft);
+  box-shadow: var(--shadow-hard-sm);
+}
+.day-plan-note {
+  font-size: 0.8rem;
+  color: #8a837c;
+  margin-bottom: 16px;
+}
+
 .timeline {
   position: relative;
   padding-left: 22px;
@@ -512,7 +536,24 @@ img, svg { display: block; max-width: 100%; }
   margin-top: 6px;
   padding-top: 6px;
   border-top: 1px dashed #d8d2c9;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
+.timeline__food-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: 1.6px solid var(--ink);
+  border-radius: 50%;
+  background: var(--yamabuki-soft);
+  color: var(--ink);
+  flex-shrink: 0;
+}
+.timeline__food-link svg { width: 13px; height: 13px; }
+.timeline__food-link:hover { background: var(--yamabuki); }
 
 .timeline__stops {
   list-style: none;
@@ -672,15 +713,40 @@ img, svg { display: block; max-width: 100%; }
 .food-card--mizu { background: var(--mizu-soft); }
 .food-card--wakatake { background: var(--wakatake-soft); }
 .food-card--neutral { background: #F0EEE8; border-style: dashed; }
+.food-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
 .food-card__name {
   font-weight: 700;
-  margin-bottom: 6px;
 }
 .food-card__desc {
   font-size: 0.82rem;
   line-height: 1.5;
   color: #4a4542;
 }
+.food-card__maps {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.food-card__map-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--ink);
+  flex-shrink: 0;
+}
+.food-card__map-link svg { width: 15px; height: 15px; }
+.food-card__map-link:hover { background: var(--yamabuki); }
 
 /* ---------- 裝備頁 ---------- */
 .gear-group { margin-bottom: 24px; }
@@ -752,20 +818,21 @@ table.expense-table {
   text-align: center;
 }
 .expense-table thead th {
-  background: var(--yamabuki-soft);
   position: sticky;
   top: 0;
+  z-index: 1;
 }
-.expense-table th:first-child, .expense-table td:first-child {
+.expense-table th.th-name, .expense-table td:first-child {
   position: sticky;
   left: 0;
   background: var(--wakatake-soft);
   font-weight: 700;
   text-align: left;
-  z-index: 1;
+  z-index: 2;
 }
-.expense-table tbody tr:nth-child(odd) td { background-color: #fffaf0; }
-.expense-table tbody tr:nth-child(odd) td:first-child { background-color: var(--wakatake-soft); }
+.expense-table [data-group="滑雪"] { background-color: var(--yamabuki-soft); }
+.expense-table [data-group="住宿"] { background-color: var(--mizu-soft); }
+.expense-table [data-group="交通"] { background-color: var(--coral-soft); }
 .expense-table tbody tr.is-me-row td { background-color: var(--coral); }
 .expense-table tbody tr.is-me-row td:first-child { background-color: var(--coral); }
 
