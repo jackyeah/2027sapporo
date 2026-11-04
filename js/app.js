@@ -301,7 +301,7 @@
       return `
         <div class="timeline__event ${item.highlight ? "is-highlight" : ""}">
           ${item.time ? `<div class="timeline__time">${item.time}</div>` : ""}
-          <div class="timeline__place">${item.place || ""}${item.highlight ? '<span class="tag tag--must">必去</span>' : ""}${(item.people || []).map(pid => {
+          <div class="timeline__place">${item.place || ""}${item.highlight ? '<span class="tag tag--must">必去</span>' : ""}${item.needsBooking ? '<span class="tag tag--booking">需預約</span>' : ""}${(item.people || []).map(pid => {
             const p = PEOPLE.find(person => person.id === pid);
             return p ? `<span class="tag tag--person" style="background:var(--${p.color})">${p.name}專屬</span>` : "";
           }).join("")}</div>

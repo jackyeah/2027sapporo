@@ -146,7 +146,6 @@ const TRIP_DATA = {
         { time: "09:00-12:00", place: "北の峰", activity: "教練課", highlight: true },
         { time: "12:00-13:00", place: "北の峰", activity: "午餐休息" },
         { time: "13:00-17:00", place: "北の峰", activity: "自由滑雪", highlight: true },
-        { time: "17:00-18:00", place: "YUMA（遊馬）", activity: "體驗狗狗拉雪橇", highlight: true },
         { type: "transport", transport: "uber", label: "搭 Uber 前往「Bestdayever」，車程 10 分鐘" },
         { time: "18:00", place: "Bestdayever", activity: "晚餐", note: "待討論，可參考美食清單", foodLink: "furano" }
       ]
@@ -170,20 +169,22 @@ const TRIP_DATA = {
             { time: "14:00", place: "Rhythm Furano", activity: "歸還雪具" },
             { type: "transport", transport: "charter", label: "包車回「Bestdayever」拿行李" },
             { time: "14:30", place: "Bestdayever", activity: "拿行李、Check out" },
+            { type: "transport", transport: "uber", label: "搭 Uber 前往「YUMA（遊馬）」，車程約 5-10 分鐘" },
+            { time: "14:45-15:15", place: "YUMA（遊馬）", activity: "體驗狗狗拉雪橇", note: "官網冬季最後報到時間為 15:00，體驗約 20-30 分鐘，建議 14:45 前抵達較保險；需事先電話預約 0167-23-5110", highlight: true, needsBooking: true },
             { type: "transport", transport: "charter", label: "包車前往「東橫INN 北海道札幌薄野十字路口」，車程 2 小時（單程接送 ¥46,000）" },
-            { time: "16:30", place: "東橫INN 北海道札幌站南口", activity: "Check in", note: "班機編號 GK057（原始資料待確認，可能誤植）" },
-            { time: "17:00-17:40", place: "狸小路商店街", activity: "逛街、Shopping" },
-            { time: "17:40-18:00", place: "ボークス札幌ショールーム", activity: "volks 公仔模型店", note: "PIVOT CROSS 6F，大通駅步行約 2 分鐘；<a href=\"https://maps.app.goo.gl/cPWtv4hqPiAcy2W79\" target=\"_blank\" rel=\"noopener\">Google 地圖</a>" },
-            { time: "18:00-18:20", place: "ちいかわらんど 札幌パルコ店", activity: "吉伊卡哇周邊商店", note: "札幌PARCO本館地下2F，大通駅直結；<a href=\"https://maps.app.goo.gl/Yyask5Y449bMp9DR9\" target=\"_blank\" rel=\"noopener\">Google 地圖</a>" },
-            { time: "18:20-18:40", place: "大通公園／札幌電視塔", activity: "電視塔夜景、天橋拍照", note: "電視塔前的人行天橋是日劇《First Love 初戀》取景地，晴道走過這座橋尋找投幣洗衣店", highlight: true },
-            { time: "19:00", place: "SHO-RIN 薄野本店", activity: "湯咖哩" },
+            { time: "17:15", place: "東橫INN 北海道札幌站南口", activity: "Check in", note: "班機編號 GK057（原始資料待確認，可能誤植）" },
+            { time: "17:45-18:25", place: "狸小路商店街", activity: "逛街、Shopping" },
+            { time: "18:25-18:45", place: "ボークス札幌ショールーム", activity: "volks 公仔模型店", note: "PIVOT CROSS 6F，大通駅步行約 2 分鐘；<a href=\"https://maps.app.goo.gl/cPWtv4hqPiAcy2W79\" target=\"_blank\" rel=\"noopener\">Google 地圖</a>" },
+            { time: "18:45-19:05", place: "ちいかわらんど 札幌パルコ店", activity: "吉伊卡哇周邊商店", note: "札幌PARCO本館地下2F，大通駅直結；2025/7 改裝後疑似改為事前預約制，請上官網或電話 011-213-0313 確認入場方式；<a href=\"https://maps.app.goo.gl/Yyask5Y449bMp9DR9\" target=\"_blank\" rel=\"noopener\">Google 地圖</a>", needsBooking: true },
+            { time: "19:05-19:25", place: "大通公園／札幌電視塔", activity: "電視塔夜景、天橋拍照", note: "電視塔前的人行天橋是日劇《First Love 初戀》取景地，晴道走過這座橋尋找投幣洗衣店", highlight: true },
+            { time: "19:45", place: "SHO-RIN 薄野本店", activity: "湯咖哩", note: "不定休，且湯售完即打烊，建議事先訂位", needsBooking: true },
             {
-              time: "20:30",
+              time: "21:15",
               place: "薄野街區",
               activity: "看夜景、拍照：薄野十字路口（NIKKA 威士忌大看板）、札幌路面電車、COCONO SUSUKINO、元祖札幌拉麵橫丁、薄野南側霓虹街道",
               highlight: true
             },
-            { time: "22:00~", place: "居酒屋", activity: "喝酒、串燒" }
+            { time: "22:45~", place: "居酒屋", activity: "喝酒、串燒" }
           ]
         },
         {
@@ -202,9 +203,9 @@ const TRIP_DATA = {
             { time: "17:00", place: "東橫INN 北海道札幌站南口", activity: "Check in", note: "班機編號 GK057（原始資料待確認，可能誤植）" },
             { time: "17:30-18:10", place: "狸小路商店街", activity: "逛街、Shopping" },
             { time: "18:10-18:30", place: "ボークス札幌ショールーム", activity: "volks 公仔模型店", note: "PIVOT CROSS 6F，大通駅步行約 2 分鐘；<a href=\"https://maps.app.goo.gl/cPWtv4hqPiAcy2W79\" target=\"_blank\" rel=\"noopener\">Google 地圖</a>" },
-            { time: "18:30-18:50", place: "ちいかわらんど 札幌パルコ店", activity: "吉伊卡哇周邊商店", note: "札幌PARCO本館地下2F，大通駅直結；<a href=\"https://maps.app.goo.gl/Yyask5Y449bMp9DR9\" target=\"_blank\" rel=\"noopener\">Google 地圖</a>" },
+            { time: "18:30-18:50", place: "ちいかわらんど 札幌パルコ店", activity: "吉伊卡哇周邊商店", note: "札幌PARCO本館地下2F，大通駅直結；2025/7 改裝後疑似改為事前預約制，請上官網或電話 011-213-0313 確認入場方式；<a href=\"https://maps.app.goo.gl/Yyask5Y449bMp9DR9\" target=\"_blank\" rel=\"noopener\">Google 地圖</a>", needsBooking: true },
             { time: "18:50-19:10", place: "大通公園／札幌電視塔", activity: "電視塔夜景、天橋拍照", note: "電視塔前的人行天橋是日劇《First Love 初戀》取景地，晴道走過這座橋尋找投幣洗衣店", highlight: true },
-            { time: "19:30", place: "SHO-RIN 薄野本店", activity: "湯咖哩" },
+            { time: "19:30", place: "SHO-RIN 薄野本店", activity: "湯咖哩", note: "不定休，且湯售完即打烊，建議事先訂位", needsBooking: true },
             {
               time: "21:00",
               place: "薄野街區",
@@ -236,7 +237,7 @@ const TRIP_DATA = {
               time: "11:30-18:30",
               place: "小樽市區",
               activity: "自由逛街＋覓食：午餐、晚餐都看到什麼吃什麼，不特別排定，逛到哪吃到哪",
-              note: "堺町通り商店街沿途可順遊以下幾間特色店，純參考不用每間都排；<a href=\"https://maps.app.goo.gl/q23VrpgVncU815dB6\" target=\"_blank\" rel=\"noopener\">Google 地圖</a>",
+              note: "堺町通り商店街沿途可順遊以下幾間特色店，純參考不用每間都排；兩間オルゴール堂冬季約 18:00 打烊，建議安排在下午較早時段，傍晚留給蒸氣鐘拍照、雪景漫步；<a href=\"https://maps.app.goo.gl/q23VrpgVncU815dB6\" target=\"_blank\" rel=\"noopener\">Google 地圖</a>",
               foodLink: "otaru",
               stops: [
                 { name: "三角市場／渡海家 拉麵", map: "https://maps.app.goo.gl/qFCS4Mm4smRy9jW46" },
@@ -259,7 +260,7 @@ const TRIP_DATA = {
           items: [
             { time: "08:00-09:00", place: "東橫INN", activity: "起床吃早餐" },
             { type: "transport", transport: "ride", label: "雪上摩托車行程專車接送，前往「定山溪」，車程約 60-80 分鐘" },
-            { time: "10:30-11:30", place: "定山溪", activity: "雪上摩托車體驗", note: "需確認報名的行程是否含飯店接送", highlight: true },
+            { time: "10:30-11:30", place: "定山溪", activity: "雪上摩托車體驗", note: "需事先線上或電話報名，並確認是否含飯店接送", highlight: true, needsBooking: true },
             { time: "11:30-13:00", place: "定山溪", activity: "溫泉足湯、午餐" },
             { type: "transport", transport: "ride", label: "搭乘じょうてつバス返回「札幌駅」，車程約 60-80 分鐘" },
             { time: "14:30", place: "大通公園／狸小路", activity: "自由活動，也可改去円山動物園（冬季企鵝散步）或白色戀人公園" },
@@ -397,6 +398,44 @@ const TRIP_DATA = {
             items: [
               { name: "ポプラファーム小樽店 哈蜜瓜冰淇淋", desc: "北海道人氣哈密瓜甜點店，以香甜多汁的哈密瓜搭配濃郁牛奶霜淇淋聞名，造型吸睛，是小樽熱門打卡美食。", map: "https://maps.app.goo.gl/YVuM2bcshN9LMxDq9" },
               { name: "SNOOPY茶屋 小樽店", desc: "以史努比為主題的特色商店，販售可愛限定周邊、甜點及伴手禮，融合日式風格與療癒氛圍，是粉絲必訪景點。", map: "https://maps.app.goo.gl/UD2HqVktEy7HnJVc9" }
+            ]
+          }
+        ]
+      },
+      {
+        id: "photo-spots",
+        label: "拍照地點",
+        groups: [
+          {
+            category: "洞爺湖・登別（1/2-1/3）",
+            color: "mizu",
+            items: [
+              { name: "洞爺湖畔", desc: "飯店頂樓露天溫泉可邊泡湯邊眺望洞爺湖夜景；隔天上午湖畔散策能遠眺羊蹄山、走訪湖底軌道與汽船棧橋，湖景日夜皆美。" },
+              { name: "登別地獄谷", desc: "荒涼奇特的地熱地貌，蒸氣裊裊，視覺張力十足，白天拍照氛圍感很強。1/3 15:00-16:30 行程內。" }
+            ]
+          },
+          {
+            category: "富良野（1/4-1/7）",
+            color: "yamabuki",
+            items: [
+              { name: "森林精靈露台（ニングルテラス）", desc: "夜間點燈散策，森林中的木屋造景溫馨浪漫，很適合拍人像。1/5 18:00 行程內。" }
+            ]
+          },
+          {
+            category: "小樽（1/8）",
+            color: "wakatake",
+            items: [
+              { name: "小樽運河", desc: "沿岸復古石造倉庫搭配冬季白雪與煤氣燈，氛圍感十足，是小樽最經典的拍照景點。1/8 10:15-11:00 行程內。", map: "https://maps.app.goo.gl/ofiSEMWCHacASSAG9" },
+              { name: "天狗山夜景", desc: "日本新三大夜景之一，山頂視野遼闊，夜晚纜車＋夜景很適合拍一組有紀念性的合照。1/8 19:00-19:48 行程內。", map: "https://maps.app.goo.gl/w6o7pMmhCVdetj3H7" }
+            ]
+          },
+          {
+            category: "札幌（1/7-1/8）",
+            color: "coral",
+            items: [
+              { name: "大通公園／電視塔天橋", desc: "電視塔前的人行天橋是日劇《First Love 初戀》取景地，晚上有電視塔夜景加持，都會感十足。1/7 傍晚行程內。" },
+              { name: "薄野十字路口", desc: "NIKKA 威士忌大看板、路面電車、霓虹街景，很有日劇感的都市夜景。1/7 晚上行程內。" },
+              { name: "藻岩山夜景", desc: "日本新三大夜景之一，山頂視野極佳，但班次較少需抓緊時間，為 1/8 方案二的備案景點。" }
             ]
           }
         ]

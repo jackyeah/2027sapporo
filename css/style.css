@@ -608,6 +608,7 @@ img, svg { display: block; max-width: 100%; }
   vertical-align: middle;
 }
 .tag--must { background: var(--coral); }
+.tag--booking { background: var(--yamabuki); }
 
 .timeline__transport {
   position: relative;

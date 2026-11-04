@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>北海道賞雪 2027</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='80'%3E%E2%9D%84%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<meta property="og:title" content="☃️ 2027 北海道冬日旅行">
+<meta property="og:description" content="從洞爺湖、登別到富良野、札幌、小樽。一起滑雪、泡湯、吃美食，收藏冬天最棒的回憶！">
+<meta property="og:image" content="https://jackyeah.github.io/2027Sapporo/assets/og-banner.png">
+<meta property="og:url" content="https://jackyeah.github.io/2027Sapporo/">
+<meta property="og:type" content="website">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -377,13 +382,16 @@
   <!-- 耳朵 -->
   <circle cx="23" cy="47" r="5" fill="#F3D2A8" stroke="var(--ink)" stroke-width="2.2"/>
   <circle cx="77" cy="47" r="5" fill="#F3D2A8" stroke="var(--ink)" stroke-width="2.2"/>
-  <!-- 金色圈圈耳環 -->
-  <circle cx="23" cy="54" r="3.2" fill="none" stroke="#D9A441" stroke-width="1.6"/>
-  <circle cx="77" cy="54" r="3.2" fill="none" stroke="#D9A441" stroke-width="1.6"/>
   <!-- 臉 -->
   <circle cx="50" cy="46" r="25" fill="#F3D2A8" stroke="var(--ink)" stroke-width="3"/>
-  <!-- 短捲髮鮑伯頭（兩側微捲往外翹） -->
+  <!-- 短捲髮鮑伯頭瀏海 -->
   <path d="M22 44 C19 22 34 12 50 12 C66 12 81 22 78 44 C78 34 76 26 72 22 C75 30 73 38 69 42 C70 32 65 24 58 22 C60 28 58 34 54 36 C52 28 48 28 46 36 C42 34 40 28 42 22 C35 24 30 32 31 42 C27 38 25 30 28 22 C24 26 22 34 22 44 Z" fill="#4A3426" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+  <!-- 鮑伯頭兩側長髮（過耳下，尾端微翹） -->
+  <path d="M21 38 C14 44 11 53 14 60 C16 65 23 66 26 61 C23 56 22 50 23 44 C23 41 22 39 21 38 Z" fill="#4A3426" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M79 38 C86 44 89 53 86 60 C84 65 77 66 74 61 C77 56 78 50 77 44 C77 41 78 39 79 38 Z" fill="#4A3426" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+  <!-- 金色圈圈耳環（垂在髮尾下） -->
+  <circle cx="20" cy="67" r="3.2" fill="none" stroke="#D9A441" stroke-width="1.6"/>
+  <circle cx="80" cy="67" r="3.2" fill="none" stroke="#D9A441" stroke-width="1.6"/>
   <!-- 棒球帽 -->
   <path d="M20 26 C20 10 33 3 50 3 C67 3 80 10 80 26 C80 28 78 29 76 28 C68 20 59 17 50 17 C41 17 32 20 24 28 C22 29 20 28 20 26 Z" fill="#AFCBE3" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
   <!-- 帽簷 -->
@@ -742,7 +750,7 @@
   <div class="nav__links" id="navLinks">
     <button class="nav__link" data-page="home">首頁</button>
     <button class="nav__link" data-page="itinerary">行程</button>
-    <button class="nav__link" data-page="food">美食</button>
+    <button class="nav__link" data-page="food">口袋名單</button>
     <button class="nav__link" data-page="gear">裝備</button>
     <button class="nav__link" data-page="finance">帳務</button>
   </div>
@@ -878,8 +886,8 @@
      美食頁（口袋名單，供討論用）
      ============================================================ -->
 <section class="page" id="page-food" data-page="food">
-  <div class="section-title"><svg><use href="#icon-food"/></svg><h2>美食口袋名單</h2></div>
-  <p class="food-page-note">1/4 晚餐、1/5 早晚餐、1/6 早晚餐、1/7 早餐還沒決定吃什麼，大家一起從這份清單挑～</p>
+  <div class="section-title"><svg><use href="#icon-food"/></svg><h2>口袋名單</h2></div>
+  <p class="food-page-note">1/4 晚餐、1/5 早晚餐、1/6 早晚餐、1/7 早餐還沒決定吃什麼，大家一起從這份清單挑；拍照地點則是預計找攝影師幫大家拍紀念照，從下面「拍照地點」分頁一起討論要選哪個點～</p>
   <div class="food-region-tabs" id="foodRegionTabs"></div>
   <div id="foodContent"></div>
 </section>
@@ -925,7 +933,7 @@
 
 <footer class="site-footer">北海道賞雪 2027 ‧ 行程如有更動請以最新版本為準</footer>
 
-<script src="js/data.js?v=6"></script>
-<script src="js/app.js?v=7"></script>
+<script src="js/data.js?v=10"></script>
+<script src="js/app.js?v=8"></script>
 </body>
 </html>
