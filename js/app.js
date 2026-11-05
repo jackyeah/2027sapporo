@@ -7,9 +7,14 @@
 
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
 
+  // 待辦清單雲端同步（Google Apps Script Web App 網址，見 apps-script/Code.gs）
+  // 留空則只會存在自己瀏覽器的 localStorage，不會同步給其他人看
+  const CHECKLIST_API_URL = "https://script.google.com/macros/s/AKfycbxcg44J-BUFWLw5rpTVCCxtJlBZzMLOZFCrBMS3NWP4vsuQK_327PhyKGsfTIhRpP0Rbw/exec";
+
   let showPage = () => {};       // 由 initNav 賦值，供跨函式切換頁面
   let selectItineraryDay = () => {}; // 由 renderItinerary 賦值，供首頁「查看完整行程」按鈕使用
   let refreshPersonalization = () => {}; // 由各 render 函式賦值，供切換身份後即時更新畫面
+  let openIdentityModal = () => {}; // 由 initIdentity 賦值，供按愛心前若尚未選身份時跳出選擇
 
   const IDENTITY_KEY = "myIdentity";
 
@@ -81,6 +86,7 @@
 
     skipBtn.addEventListener("click", closeModal);
     navBtn.addEventListener("click", openModal);
+    openIdentityModal = openModal;
 
     applyIdentity(getMyIdentity());
 
@@ -236,30 +242,132 @@
     `).join("");
   }
 
-  /* ---------------- 待辦清單（localStorage 記憶打勾） ---------------- */
+  /* ---------------- 待辦清單（localStorage 記憶打勾，可選接 Google Sheet 同步） ---------------- */
+  const CHECKLIST_STORAGE_KEY = "checklistChecked";
+
+  function getLocalChecklistState() {
+    return JSON.parse(localStorage.getItem(CHECKLIST_STORAGE_KEY) || "{}");
+  }
+  function setLocalChecklistState(state) {
+    localStorage.setItem(CHECKLIST_STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function fetchChecklistRemote() {
+    return fetch(CHECKLIST_API_URL)
+      .then(res => res.json())
+      .catch(() => null);
+  }
+
+  function syncChecklistItem(personId, itemIndex, checked) {
+    fetch(CHECKLIST_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" }, // 用 text/plain 避免觸發 CORS 預檢請求
+      body: JSON.stringify({ personId, itemIndex, checked }),
+    }).catch(() => {});
+  }
+
+  // 把 checklist 設定攤平成 { type: "item", label } / { type: "group", label, children } 的結構，
+  // group 的 children 目前只支援 source: "selfPrepareGear"（對應裝備頁「要自己準備的部分」）
+  function getChecklistStructure() {
+    return TRIP_DATA.checklist.map(entry => {
+      if (typeof entry === "string") return { type: "item", label: entry };
+      const children = entry.source === "selfPrepareGear"
+        ? TRIP_DATA.gear.selfPrepare.items.map(i => i.name)
+        : (entry.items || []);
+      return { type: "group", label: entry.group, children };
+    });
+  }
+
+  function getChecklistFlatCount(structure) {
+    return structure.reduce((sum, entry) => sum + (entry.type === "group" ? entry.children.length : 1), 0);
+  }
+
   function renderChecklist() {
     const wrap = document.getElementById("checklist");
-    const key = "checklistChecked";
-    const saved = JSON.parse(localStorage.getItem(key) || "{}");
-
-    wrap.innerHTML = TRIP_DATA.checklist.map((item, i) => `
-      <li class="checklist__item ${saved[i] ? "is-checked" : ""}" data-idx="${i}">
-        <span class="checklist__box"><svg><use href="#icon-check"/></svg></span>
-        <span class="checklist__text">${item}</span>
-      </li>
-    `).join("");
-
     const me = getMyIdentity();
+    const saved = getLocalChecklistState();
+
+    function renderItemLi(label, i) {
+      return `
+        <li class="checklist__item ${saved[i] ? "is-checked" : ""}" data-idx="${i}">
+          <span class="checklist__box"><svg><use href="#icon-check"/></svg></span>
+          <span class="checklist__text">${label}</span>
+        </li>
+      `;
+    }
+
+    function paintList() {
+      const structure = getChecklistStructure();
+      let idx = 0;
+
+      wrap.innerHTML = structure.map(entry => {
+        if (entry.type === "item") {
+          return renderItemLi(entry.label, idx++);
+        }
+
+        const startIdx = idx;
+        const childrenHtml = entry.children.map(label => renderItemLi(label, idx++)).join("");
+        const doneCount = entry.children.filter((_, j) => saved[startIdx + j]).length;
+        return `
+          <li class="checklist__group" data-group-start="${startIdx}" data-group-count="${entry.children.length}">
+            <button class="checklist__group-toggle" type="button">
+              <span class="checklist__group-icon">+</span>
+              <span class="checklist__group-name">${entry.label}</span>
+              <span class="checklist__group-progress">${doneCount}/${entry.children.length}</span>
+            </button>
+            <ul class="checklist__group-items">${childrenHtml}</ul>
+          </li>
+        `;
+      }).join("");
+
+      wrap.querySelectorAll(".checklist__item").forEach(li => {
+        li.addEventListener("click", () => {
+          li.classList.toggle("is-checked");
+          const checked = li.classList.contains("is-checked");
+          const idx = Number(li.dataset.idx);
+          const state = getLocalChecklistState();
+          state[idx] = checked;
+          setLocalChecklistState(state);
+          if (CHECKLIST_API_URL && me) syncChecklistItem(me.id, idx, checked);
+
+          const group = li.closest(".checklist__group");
+          if (group) {
+            const start = Number(group.dataset.groupStart);
+            const count = Number(group.dataset.groupCount);
+            let done = 0;
+            for (let j = 0; j < count; j++) if (state[start + j]) done++;
+            group.querySelector(".checklist__group-progress").textContent = `${done}/${count}`;
+          }
+        });
+      });
+
+      wrap.querySelectorAll(".checklist__group-toggle").forEach(btn => {
+        btn.addEventListener("click", () => {
+          btn.closest(".checklist__group").classList.toggle("is-expanded");
+        });
+      });
+    }
+
     const titleEl = document.getElementById("checklistTitle");
     if (titleEl) titleEl.textContent = me ? `${me.name} 的行前待辦` : "行前待辦";
 
-    wrap.querySelectorAll(".checklist__item").forEach(li => {
-      li.addEventListener("click", () => {
-        li.classList.toggle("is-checked");
-        const state = JSON.parse(localStorage.getItem(key) || "{}");
-        state[li.dataset.idx] = li.classList.contains("is-checked");
-        localStorage.setItem(key, JSON.stringify(state));
-      });
+    paintList();
+
+    if (!CHECKLIST_API_URL || !me) return;
+
+    fetchChecklistRemote().then(rows => {
+      if (!rows) return;
+
+      // 以雲端資料為準蓋回本機狀態，避免多裝置不同步
+      const state = getLocalChecklistState();
+      const flatCount = getChecklistFlatCount(getChecklistStructure());
+      for (let i = 0; i < flatCount; i++) {
+        const row = rows.find(r => r.personId === me.id && r.itemIndex === i);
+        if (row) state[i] = row.checked;
+      }
+      setLocalChecklistState(state);
+      Object.assign(saved, state);
+      paintList();
     });
   }
 
@@ -440,6 +548,70 @@
   /* ---------------- 美食頁 ---------------- */
   let activeFoodRegion = null;
 
+  // 口袋名單愛心（複用 CHECKLIST_API_URL 同一個 Apps Script 部署，Sheet 另開 "Likes" 分頁）
+  let foodLikesCache = [];
+
+  function foodItemId(regionId, category, name) {
+    return `${regionId}::${category}::${name}`;
+  }
+
+  function fetchLikesRemote() {
+    if (!CHECKLIST_API_URL) return Promise.resolve(null);
+    return fetch(`${CHECKLIST_API_URL}?type=likes`)
+      .then(res => res.json())
+      .catch(() => null);
+  }
+
+  function syncLike(itemId, personId, liked) {
+    fetch(CHECKLIST_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" }, // 用 text/plain 避免觸發 CORS 預檢請求
+      body: JSON.stringify({ type: "like", itemId, personId, liked }),
+    }).catch(() => {});
+  }
+
+  function buildHeartHtml(itemId) {
+    const likers = foodLikesCache.filter(r => r.itemId === itemId && r.liked);
+    const me = getMyIdentity();
+    const likedByMe = !!(me && likers.some(l => l.personId === me.id));
+    const names = likers.map(l => (PEOPLE.find(p => p.id === l.personId) || {}).name).filter(Boolean);
+
+    return `
+      <div class="food-card__like-wrap">
+        <button class="food-card__like${likedByMe ? " is-liked" : ""}" data-item-id="${itemId}" title="按愛心表示喜歡">
+          <svg><use href="#icon-heart"/></svg>
+          <span class="food-card__like-count">${likers.length}</span>
+        </button>
+        ${names.length ? `<span class="food-card__likers">${names.join("、")}</span>` : ""}
+      </div>
+    `;
+  }
+
+  function bindHeartButtons(wrap) {
+    wrap.querySelectorAll(".food-card__like").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const me = getMyIdentity();
+        if (!me) {
+          openIdentityModal();
+          return;
+        }
+        const itemId = btn.dataset.itemId;
+        const likers = foodLikesCache.filter(r => r.itemId === itemId);
+        const existing = likers.find(l => l.personId === me.id);
+        const nextLiked = !(existing && existing.liked);
+
+        if (existing) {
+          existing.liked = nextLiked;
+        } else {
+          foodLikesCache.push({ itemId, personId: me.id, liked: nextLiked });
+        }
+
+        if (CHECKLIST_API_URL) syncLike(itemId, me.id, nextLiked);
+        renderFoodContent();
+      });
+    });
+  }
+
   function renderFood() {
     const regions = TRIP_DATA.foodOptions.regions;
     const tabsWrap = document.getElementById("foodRegionTabs");
@@ -457,6 +629,14 @@
     });
 
     renderFoodContent();
+
+    if (CHECKLIST_API_URL) {
+      fetchLikesRemote().then(rows => {
+        if (!rows) return;
+        foodLikesCache = rows;
+        renderFoodContent();
+      });
+    }
   }
 
   function renderFoodContent() {
@@ -481,11 +661,14 @@
                 ${buildFoodMapLinks(it)}
               </div>
               <div class="food-card__desc">${it.desc}</div>
+              ${buildHeartHtml(foodItemId(region.id, group.category, it.name))}
             </div>
           `).join("")}
         </div>
       </div>
     `).join("");
+
+    bindHeartButtons(wrap);
   }
 
   function buildFoodMapLinks(it) {

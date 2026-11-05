@@ -11,7 +11,7 @@ const PEOPLE = [
   { id: "zhiyang", name: "致養", fullName: "吳致養", avatar: "avatar-zhiyang", color: "yamabuki", gender: "male" },
   { id: "fengwei", name: "鋒瑋", fullName: "陳鋒瑋", avatar: "avatar-fengwei", color: "coral", gender: "male" },
   { id: "yunting", name: "云婷", fullName: "鄭云婷", avatar: "avatar-yunting", avatarAlt: "avatar-yunting-1", color: "coral", gender: "female" },
-  { id: "shengzhao", name: "陞漜", fullName: "黃陞漜", avatar: "avatar-shengzhao", color: "wakatake", gender: "female" },
+  { id: "shengzhao", name: "陞埜", fullName: "黃陞埜", avatar: "avatar-shengzhao", color: "wakatake", gender: "female" },
   { id: "haidi", name: "海蒂", fullName: "劉海蒂", avatar: "avatar-haidi", color: "mizu-soft", gender: "female" },
   { id: "simin", name: "思旻", fullName: "吳思旻", avatar: "avatar-simin", color: "yamabuki-soft", gender: "female" }
 ];
@@ -445,14 +445,19 @@ const TRIP_DATA = {
 
   checklist: [
     "護照（效期 6 個月以上）",
+    "Visit Japan Web",
     "日幣現金 / 信用卡",
     "行動網路 / eSim",
-    "雪衣雪褲",
-    "護臀、護膝（必備）",
+    "日常衣物",
+    // 展開後列出「裝備」頁「要自己準備的部分」(gear.selfPrepare) 的品項，
+    // 兩邊共用同一份清單，避免內容重複維護、彼此失去同步
+    { group: "滑雪用具", source: "selfPrepareGear" },
     "暖暖包",
     "常備藥品",
     "相機、記憶卡、行動電源",
-    "飯店 / 包車預訂確認信",
+    "充電線",
+    "盥洗用具（牙刷牙膏）",
+    "保養用具",
     "伴手禮採購清單"
   ],
 
@@ -505,7 +510,7 @@ const TRIP_DATA = {
     { name: "阿緯", coach: "¥49,200", gearSet: "¥25,020 ($5,459)", liftTicket: "", hotel1: "¥28,467", hotel2: "¥17,604", hotel3: "$7,500", hotel4: "¥27,610", charter: "¥29,429" },
     { name: "云婷", coach: "¥49,200", gearSet: "¥25,020 ($5,459)", liftTicket: "", hotel1: "¥28,467", hotel2: "¥17,604", hotel3: "$7,500", hotel4: "", charter: "¥29,429" },
     { name: "致養", coach: "¥49,200", gearSet: "¥39,060 ($8,523)", liftTicket: "", hotel1: "¥28,467", hotel2: "¥17,604", hotel3: "$7,500", hotel4: "¥27,610", charter: "¥29,429" },
-    { name: "陞漜", coach: "¥49,200", gearSet: "¥39,060 ($8,523)", liftTicket: "", hotel1: "¥28,467", hotel2: "¥17,604", hotel3: "$7,500", hotel4: "", charter: "¥29,429" },
+    { name: "陞埜", coach: "¥49,200", gearSet: "¥39,060 ($8,523)", liftTicket: "", hotel1: "¥28,467", hotel2: "¥17,604", hotel3: "$7,500", hotel4: "", charter: "¥29,429" },
     { name: "鋒瑋", coach: "¥49,200", gearSet: "¥39,060 ($8,523)", liftTicket: "", hotel1: "¥28,467", hotel2: "¥17,604", hotel3: "$7,500", hotel4: "¥27,610", charter: "¥29,429" },
     { name: "海蒂", coach: "¥49,200", gearSet: "¥39,060 ($8,523)", liftTicket: "", hotel1: "¥28,467", hotel2: "¥17,604", hotel3: "$7,500", hotel4: "", charter: "¥29,429" },
     { name: "思旻", coach: "¥49,200", gearSet: "¥39,060 ($8,523)", liftTicket: "", hotel1: "¥28,467", hotel2: "¥17,604", hotel3: "$7,500", hotel4: "¥19,400", charter: "¥29,429" }

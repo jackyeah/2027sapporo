@@ -402,6 +402,50 @@ img, svg { display: block; max-width: 100%; }
 .checklist__box svg { width: 14px; height: 14px; opacity: 0; transform: scale(0.5); transition: all var(--dur-fast); }
 .checklist__item.is-checked .checklist__box svg { opacity: 1; transform: scale(1); }
 
+/* 待辦清單的主副項目（可展開的群組，如「滑雪用具」） */
+.checklist__group {
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.checklist__group-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+}
+.checklist__group-icon {
+  width: 22px; height: 22px;
+  flex-shrink: 0;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  transition: transform var(--dur-fast);
+}
+.checklist__group.is-expanded .checklist__group-icon { transform: rotate(45deg); }
+.checklist__group-name { flex: 1; }
+.checklist__group-progress { font-size: 12px; color: #7a746e; flex-shrink: 0; }
+.checklist__group-items {
+  list-style: none;
+  margin: 0;
+  padding: 0 12px 12px 44px;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+.checklist__group.is-expanded .checklist__group-items { display: flex; }
+
 /* ---------- 行程頁 ---------- */
 .day-tabs {
   display: flex;
@@ -748,6 +792,26 @@ img, svg { display: block; max-width: 100%; }
 }
 .food-card__map-link svg { width: 15px; height: 15px; }
 .food-card__map-link:hover { background: var(--yamabuki); }
+
+.food-card__like-wrap { display: flex; align-items: center; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.food-card__like {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform var(--dur-fast);
+}
+.food-card__like:active { transform: scale(0.92); }
+.food-card__like svg { width: 14px; height: 14px; color: #fff; }
+.food-card__like.is-liked svg { color: var(--coral); }
+.food-card__like-count { font-size: 0.78rem; font-weight: 700; }
+.food-card__likers { font-size: 0.72rem; color: #7a746e; }
 
 /* ---------- 裝備頁 ---------- */
 .gear-group { margin-bottom: 24px; }
