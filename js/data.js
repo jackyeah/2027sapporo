@@ -36,12 +36,12 @@ const TRIP_DATA = {
     {
       direction: "回程",
       date: "1/9 (六)",
-      flightNo: "",
+      flightNo: "JX319",
       from: { code: "CTS", name: "新千歲機場" },
       to: { code: "RMQ", name: "台中清泉崗" },
       depart: "15:00",
       arrive: "18:25",
-      note: "班機編號待確認；提早到機場掛行李，出關後再逛免稅"
+      note: "提早到機場掛行李，出關後再逛免稅"
     }
   ],
 
@@ -68,14 +68,15 @@ const TRIP_DATA = {
       title: "出發日．飛往北海道",
       scene: "scene-toya",
       items: [
-        { time: "7:00", place: "台中清泉崗機場", activity: "登機手續" },
+        { time: "6:30", place: "台中清泉崗機場", activity: "集合" },
+        { time: "7:00", place: "台中清泉崗機場", activity: "登機手續", important: true },
         { type: "transport", transport: "flight", label: "JX318　【RMQ】09:00 起飛 → 【CTS】15:55 抵達", note: "入關手續，可能需要排隊等候" },
         { time: "16:30", place: "新千歲機場", activity: "搭包車前往飯店" },
         { type: "transport", transport: "charter", label: "包車前往「洞爺湖」，車程 1.5 小時（單程接送 ¥45,000）" },
-        { time: "18:00", place: "洞爺湖畔亭飯店", activity: "Check in", note: "從飯店看往湖的方向可遠眺羊蹄山" },
-        { time: "17:30-20:30", place: "洞爺湖畔亭飯店", activity: "自助晚餐", note: "懷石小火鍋、小烤肉爐、北海道海鮮，現煮拉麵、甜點、霜淇淋機、刨冰機都有；湖景窗邊座位很熱門，建議提早入座", highlight: true },
-        { time: "", place: "洞爺湖畔亭頂樓", activity: "露天溫泉", note: "邊泡湯邊眺望洞爺湖夜景", highlight: true },
-        { time: "", place: "洞爺湖", activity: "湖邊散步看夜景", highlight: true }
+        { time: "18:00", place: "洞爺湖畔亭飯店", activity: "Check in", note: "從飯店看往湖的方向可遠眺羊蹄山", stay: true },
+        { time: "17:30-20:30", place: "洞爺湖畔亭飯店", activity: "自助晚餐", note: "懷石小火鍋、小烤肉爐、北海道海鮮，現煮拉麵、甜點、霜淇淋機、刨冰機都有；湖景窗邊座位很熱門，建議提早入座", meal: true },
+        { time: "", place: "洞爺湖畔亭頂樓", activity: "露天溫泉", note: "邊泡湯邊眺望洞爺湖夜景" },
+        { time: "", place: "洞爺湖", activity: "湖邊散步看夜景", note: "附近可以去 Seicomart，這是北海道才有的便利商店" }
       ]
     },
     {
@@ -84,16 +85,16 @@ const TRIP_DATA = {
       title: "洞爺湖 → 登別地獄谷",
       scene: "scene-jigokudani",
       items: [
-        { time: "7:00-9:00", place: "洞爺湖畔亭飯店", activity: "飯店早餐" },
-        { time: "10:00", place: "洞爺湖畔亭飯店", activity: "退房" },
-        { time: "10:00-11:00", place: "洞爺湖", activity: "湖畔散步，依序逛：", stops: ["遠眺羊蹄山", "洞爺湖八景", "汽船棧橋", "湖底軌道", "小商店街"], highlight: true },
+        { time: "7:00-9:00", place: "洞爺湖畔亭飯店", activity: "飯店早餐", meal: true },
+        { time: "10:00", place: "洞爺湖畔亭飯店", activity: "退房", stay: true },
+        { time: "10:00-11:00", place: "洞爺湖", activity: "湖畔散步，依序逛：", stops: ["遠眺羊蹄山", "洞爺湖八景", "汽船棧橋", "湖底軌道", "小商店街"] },
         { type: "transport", transport: "charter", label: "包車前往「登別」，車程 1.5 小時（單程接送 ¥40,000）" },
         { time: "12:30", place: "Mahoroba", activity: "放行李" },
-        { time: "13:00", place: "溫泉市場", activity: "閻魔炒麵（使用北海道小麥平打麵、特製醬汁與當地海鮮快炒）；登別硫磺泉溫泉蛋、蒸蛤蠣、炸牡蠣", highlight: true },
+        { time: "13:00", place: "溫泉市場", activity: "閻魔炒麵（使用北海道小麥平打麵、特製醬汁與當地海鮮快炒）；登別硫磺泉溫泉蛋、蒸蛤蠣、炸牡蠣", meal: true },
         { time: "15:00-16:30", place: "地獄谷", activity: "拍照、看景", highlight: true },
         { time: "16:30-17:30", place: "登別溫泉街", activity: "逛街，依序走：", stops: ["貴泉堂本店（鬼怪紀念品）", "玉川本店（老字號伴手禮）", "閻魔堂（閻魔王機關表演）"] },
-        { time: "17:30", place: "Mahoroba", activity: "Check in" },
-        { time: "18:00", place: "Mahoroba", activity: "自助晚餐：北海道螃蟹吃到飽（長腳蟹、帝王蟹）、生魚片、干貝、甜蝦、鮭魚卵海鮮丼 DIY；開放式廚房現烤海鮮、天婦羅、拉麵、牛排", highlight: true },
+        { time: "17:30", place: "Mahoroba", activity: "Check in", stay: true },
+        { time: "18:00", place: "Mahoroba", activity: "自助晚餐：北海道螃蟹吃到飽（長腳蟹、帝王蟹）、生魚片、干貝、甜蝦、鮭魚卵海鮮丼 DIY；開放式廚房現烤海鮮、天婦羅、拉麵、牛排", meal: true },
         { time: "", place: "", activity: "泡溫泉、休息" }
       ]
     },
@@ -103,17 +104,17 @@ const TRIP_DATA = {
       title: "移動日．前進富良野雪場",
       scene: "scene-travel",
       items: [
-        { time: "7:00-9:00", place: "Mahoroba", activity: "飯店早餐" },
-        { time: "9:30", place: "Mahoroba", activity: "Check out" },
+        { time: "7:00-9:00", place: "Mahoroba", activity: "飯店早餐", meal: true },
+        { time: "9:30", place: "Mahoroba", activity: "Check out", stay: true },
         { type: "transport", transport: "charter", label: "包車前往「富良野市區」，車程 3 小時（本日約 8 小時包車，總費用 ¥75,000）" },
-        { time: "12:30", place: "富良野市區", activity: "午餐", note: "待討論，可參考美食清單", foodLink: "furano" },
+        { time: "12:30", place: "富良野市區", activity: "午餐", note: "待討論，可參考美食清單", foodLink: "furano", meal: true },
         { type: "transport", transport: "charter", label: "包車前往「富良野雪場」，車程 1 小時" },
-        { time: "15:30", place: "Rhythm Furano", activity: "雪具租借、尺寸確認、試穿" },
+        { time: "15:30", place: "Rhythm Furano", activity: "雪具租借、尺寸確認、試穿", highlight: true },
         { type: "transport", transport: "charter", label: "包車前往「CoopSapporo 超市 富良野店」，車程 14 分鐘" },
         { time: "16:00-16:40", place: "CoopSapporo 超市 富良野店", activity: "採買食材，一起帶回民宿" },
         { type: "transport", transport: "charter", label: "包車前往「Bestdayever」" },
-        { time: "17:00", place: "Bestdayever", activity: "Check in" },
-        { time: "18:00", place: "Bestdayever", activity: "晚餐", note: "待討論，可參考美食清單", foodLink: "furano" }
+        { time: "17:00", place: "Bestdayever", activity: "Check in", stay: true },
+        { time: "18:00", place: "Bestdayever", activity: "晚餐", note: "待討論，可參考美食清單", foodLink: "furano", meal: true }
       ]
     },
     {
@@ -122,17 +123,17 @@ const TRIP_DATA = {
       title: "富良野滑雪 Day 1",
       scene: "scene-snowboard-1",
       items: [
-        { time: "08:00-09:00", place: "Bestdayever", activity: "起床吃早餐" },
+        { time: "08:00-09:00", place: "Bestdayever", activity: "起床吃早餐", meal: true },
         { type: "transport", transport: "uber", label: "搭 Uber 前往「北の峰」，車程 10 分鐘" },
         { time: "09:00-12:00", place: "北の峰", activity: "教練課", highlight: true },
-        { time: "12:00-13:00", place: "北の峰", activity: "午餐休息" },
+        { time: "12:00-13:00", place: "北の峰", activity: "午餐休息", meal: true },
         { time: "13:00-16:00", place: "北の峰", activity: "教練課", highlight: true },
         { time: "16:00-17:00", place: "北の峰", activity: "自由滑雪" },
         { type: "transport", transport: "uber", label: "搭 Uber 前往「森林精靈露台（ニングルテラス）」" },
         { time: "18:00", place: "森林精靈露台（ニングルテラス）", activity: "夜間點燈散策、手作工坊小店", note: "園區內有賣小吃，可以在這邊先墊墊肚子", highlight: true },
         { time: "19:00", place: "ふらの歓寒村（Kan Kan Mura）", activity: "雪地點燈活動", highlight: true },
         { type: "transport", transport: "uber", label: "搭 Uber 前往「Bestdayever」，車程 10 分鐘" },
-        { time: "20:00", place: "Bestdayever", activity: "晚餐", note: "待討論，可參考美食清單", foodLink: "furano" }
+        { time: "20:00", place: "Bestdayever", activity: "晚餐", note: "待討論，可參考美食清單", foodLink: "furano", meal: true }
       ]
     },
     {
@@ -141,13 +142,13 @@ const TRIP_DATA = {
       title: "富良野滑雪 Day 2",
       scene: "scene-snowboard-2",
       items: [
-        { time: "08:00-09:00", place: "Bestdayever", activity: "起床吃早餐" },
+        { time: "08:00-09:00", place: "Bestdayever", activity: "起床吃早餐", meal: true },
         { type: "transport", transport: "uber", label: "搭 Uber 前往「北の峰」，車程 10 分鐘" },
         { time: "09:00-12:00", place: "北の峰", activity: "教練課", highlight: true },
-        { time: "12:00-13:00", place: "北の峰", activity: "午餐休息" },
+        { time: "12:00-13:00", place: "北の峰", activity: "午餐休息", meal: true },
         { time: "13:00-17:00", place: "北の峰", activity: "自由滑雪", highlight: true },
         { type: "transport", transport: "uber", label: "搭 Uber 前往「Bestdayever」，車程 10 分鐘" },
-        { time: "18:00", place: "Bestdayever", activity: "晚餐", note: "待討論，可參考美食清單", foodLink: "furano" }
+        { time: "18:00", place: "Bestdayever", activity: "晚餐", note: "待討論，可參考美食清單", foodLink: "furano", meal: true }
       ]
     },
     {
@@ -161,58 +162,58 @@ const TRIP_DATA = {
           id: "slope-lunch",
           label: "方案一：雪場用餐",
           items: [
-            { time: "08:00-09:00", place: "Bestdayever", activity: "起床吃早餐" },
+            { time: "08:00-09:00", place: "Bestdayever", activity: "起床吃早餐", meal: true },
             { type: "transport", transport: "uber", label: "搭 Uber 前往「北の峰」，車程 10 分鐘" },
             { time: "10:00-12:00", place: "北の峰", activity: "快樂滑雪", highlight: true },
-            { time: "12:00-13:00", place: "北の峰", activity: "午餐", note: "雪場內用餐，餐廳選擇依現場為主" },
+            { time: "12:00-13:00", place: "北の峰", activity: "午餐", note: "雪場內用餐，餐廳選擇依現場為主", meal: true },
             { time: "13:00-14:00", place: "北の峰", activity: "快樂滑雪", highlight: true },
             { time: "14:00", place: "Rhythm Furano", activity: "歸還雪具" },
             { type: "transport", transport: "charter", label: "包車回「Bestdayever」拿行李" },
-            { time: "14:30", place: "Bestdayever", activity: "拿行李、Check out" },
+            { time: "14:30", place: "Bestdayever", activity: "拿行李、Check out", stay: true },
             { type: "transport", transport: "uber", label: "搭 Uber 前往「YUMA（遊馬）」，車程約 5-10 分鐘" },
             { time: "14:45-15:15", place: "YUMA（遊馬）", activity: "體驗狗狗拉雪橇", note: "官網冬季最後報到時間為 15:00，體驗約 20-30 分鐘，建議 14:45 前抵達較保險；需事先電話預約 0167-23-5110", highlight: true, needsBooking: true },
             { type: "transport", transport: "charter", label: "包車前往「東橫INN 北海道札幌薄野十字路口」，車程 2 小時（單程接送 ¥46,000）" },
-            { time: "17:15", place: "東橫INN 北海道札幌站南口", activity: "Check in", note: "班機編號 GK057（原始資料待確認，可能誤植）" },
+            { time: "17:15", place: "東橫INN 北海道札幌站南口", activity: "Check in", stay: true },
             { time: "17:45-18:25", place: "狸小路商店街", activity: "逛街、Shopping" },
             { time: "18:25-18:45", place: "ボークス札幌ショールーム", activity: "volks 公仔模型店", note: "PIVOT CROSS 6F，大通駅步行約 2 分鐘；<a href=\"https://maps.app.goo.gl/cPWtv4hqPiAcy2W79\" target=\"_blank\" rel=\"noopener\">Google 地圖</a>" },
             { time: "18:45-19:05", place: "ちいかわらんど 札幌パルコ店", activity: "吉伊卡哇周邊商店", note: "札幌PARCO本館地下2F，大通駅直結；2025/7 改裝後疑似改為事前預約制，請上官網或電話 011-213-0313 確認入場方式；<a href=\"https://maps.app.goo.gl/Yyask5Y449bMp9DR9\" target=\"_blank\" rel=\"noopener\">Google 地圖</a>", needsBooking: true },
             { time: "19:05-19:25", place: "大通公園／札幌電視塔", activity: "電視塔夜景、天橋拍照", note: "電視塔前的人行天橋是日劇《First Love 初戀》取景地，晴道走過這座橋尋找投幣洗衣店", highlight: true },
-            { time: "19:45", place: "SHO-RIN 薄野本店", activity: "湯咖哩", note: "不定休，且湯售完即打烊，建議事先訂位", needsBooking: true },
+            { time: "19:45", place: "SHO-RIN 薄野本店", activity: "湯咖哩", note: "不定休，且湯售完即打烊，建議事先訂位", needsBooking: true, meal: true },
             {
               time: "21:15",
               place: "薄野街區",
               activity: "看夜景、拍照：薄野十字路口（NIKKA 威士忌大看板）、札幌路面電車、COCONO SUSUKINO、元祖札幌拉麵橫丁、薄野南側霓虹街道",
               highlight: true
             },
-            { time: "22:45~", place: "居酒屋", activity: "喝酒、串燒" }
+            { time: "22:45~", place: "居酒屋", activity: "喝酒、串燒", meal: true }
           ]
         },
         {
           id: "town-lunch",
           label: "方案二：市區用餐",
           items: [
-            { time: "08:00-09:00", place: "Bestdayever", activity: "起床吃早餐" },
+            { time: "08:00-09:00", place: "Bestdayever", activity: "起床吃早餐", meal: true },
             { type: "transport", transport: "uber", label: "搭 Uber 前往「北の峰」，車程 10 分鐘" },
             { time: "10:00-13:00", place: "北の峰", activity: "快樂滑雪", highlight: true },
             { time: "13:30", place: "Rhythm Furano", activity: "歸還雪具" },
             { type: "transport", transport: "charter", label: "包車前往「富良野市區」，車程約 15 分鐘" },
-            { time: "14:00", place: "富良野市區", activity: "午餐", note: "待討論，可參考美食清單", foodLink: "furano" },
+            { time: "14:00", place: "富良野市區", activity: "午餐", note: "待討論，可參考美食清單", foodLink: "furano", meal: true },
             { type: "transport", transport: "charter", label: "包車回「Bestdayever」拿行李" },
-            { time: "15:00", place: "Bestdayever", activity: "拿行李、Check out" },
+            { time: "15:00", place: "Bestdayever", activity: "拿行李、Check out", stay: true },
             { type: "transport", transport: "charter", label: "包車前往「東橫INN 北海道札幌薄野十字路口」，車程 2 小時（單程接送 ¥46,000）" },
-            { time: "17:00", place: "東橫INN 北海道札幌站南口", activity: "Check in", note: "班機編號 GK057（原始資料待確認，可能誤植）" },
+            { time: "17:00", place: "東橫INN 北海道札幌站南口", activity: "Check in", stay: true },
             { time: "17:30-18:10", place: "狸小路商店街", activity: "逛街、Shopping" },
             { time: "18:10-18:30", place: "ボークス札幌ショールーム", activity: "volks 公仔模型店", note: "PIVOT CROSS 6F，大通駅步行約 2 分鐘；<a href=\"https://maps.app.goo.gl/cPWtv4hqPiAcy2W79\" target=\"_blank\" rel=\"noopener\">Google 地圖</a>" },
             { time: "18:30-18:50", place: "ちいかわらんど 札幌パルコ店", activity: "吉伊卡哇周邊商店", note: "札幌PARCO本館地下2F，大通駅直結；2025/7 改裝後疑似改為事前預約制，請上官網或電話 011-213-0313 確認入場方式；<a href=\"https://maps.app.goo.gl/Yyask5Y449bMp9DR9\" target=\"_blank\" rel=\"noopener\">Google 地圖</a>", needsBooking: true },
             { time: "18:50-19:10", place: "大通公園／札幌電視塔", activity: "電視塔夜景、天橋拍照", note: "電視塔前的人行天橋是日劇《First Love 初戀》取景地，晴道走過這座橋尋找投幣洗衣店", highlight: true },
-            { time: "19:30", place: "SHO-RIN 薄野本店", activity: "湯咖哩", note: "不定休，且湯售完即打烊，建議事先訂位", needsBooking: true },
+            { time: "19:30", place: "SHO-RIN 薄野本店", activity: "湯咖哩", note: "不定休，且湯售完即打烊，建議事先訂位", needsBooking: true, meal: true },
             {
               time: "21:00",
               place: "薄野街區",
               activity: "看夜景、拍照：薄野十字路口（NIKKA 威士忌大看板）、札幌路面電車、COCONO SUSUKINO、元祖札幌拉麵橫丁、薄野南側霓虹街道",
               highlight: true
             },
-            { time: "22:30~", place: "居酒屋", activity: "喝酒、串燒" }
+            { time: "22:30~", place: "居酒屋", activity: "喝酒、串燒", meal: true }
           ]
         }
       ]
@@ -228,17 +229,21 @@ const TRIP_DATA = {
           id: "otaru",
           label: "方案一：小樽",
           items: [
-            { time: "08:00-09:00", place: "東橫INN", activity: "起床吃早餐" },
+            { time: "07:00-07:30", place: "東橫INN", activity: "起床吃早餐", meal: true },
             { type: "transport", transport: "ride", label: "搭 JR 前往「小樽駅」，車程約 35 分鐘" },
-            { time: "09:45-10:15", place: "三角市場", activity: "海鮮早市、海鮮丼", note: "JR小樽駅旁，以新鮮海膽、帝王蟹及豪華海鮮丼聞名；<a href=\"https://maps.app.goo.gl/7qii2Y9oG7diXLYs6\" target=\"_blank\" rel=\"noopener\">Google 地圖</a>" },
-            { time: "10:15-11:00", place: "小樽運河", activity: "運河散策、拍照", note: "沿岸保留復古石造倉庫，冬季白雪與煤氣燈交織；<a href=\"https://maps.app.goo.gl/ofiSEMWCHacASSAG9\" target=\"_blank\" rel=\"noopener\">Google 地圖</a>", highlight: true },
-            { time: "11:00-11:30", place: "小樽浮世繪美術館", activity: "逛浮世繪展覽（可視興趣彈性跳過）", note: "收藏葛飾北齋等名家作品；<a href=\"https://maps.app.goo.gl/ZXCCBekR1XoPWT5r5\" target=\"_blank\" rel=\"noopener\">Google 地圖</a>" },
+            { type: "transport", transport: "ride", label: "轉搭巴士前往「小樽水族館」，確切交通時間待確認" },
+            { time: "09:00-11:00", place: "小樽水族館", activity: "參觀小樽水族館", highlight: true },
+            { type: "transport", transport: "ride", label: "搭巴士返回「小樽駅」" },
+            { time: "11:15-11:45", place: "三角市場", activity: "海鮮早市、海鮮丼", note: "JR小樽駅旁，以新鮮海膽、帝王蟹及豪華海鮮丼聞名；<a href=\"https://maps.app.goo.gl/7qii2Y9oG7diXLYs6\" target=\"_blank\" rel=\"noopener\">Google 地圖</a>", meal: true },
+            { time: "11:45-12:30", place: "小樽運河", activity: "運河散策、拍照", note: "沿岸保留復古石造倉庫，冬季白雪與煤氣燈交織；<a href=\"https://maps.app.goo.gl/ofiSEMWCHacASSAG9\" target=\"_blank\" rel=\"noopener\">Google 地圖</a>", highlight: true },
+            { time: "12:30-13:00", place: "小樽浮世繪美術館", activity: "逛浮世繪展覽（可視興趣彈性跳過）", note: "收藏葛飾北齋等名家作品；<a href=\"https://maps.app.goo.gl/ZXCCBekR1XoPWT5r5\" target=\"_blank\" rel=\"noopener\">Google 地圖</a>" },
             {
-              time: "11:30-18:30",
+              time: "13:00-18:30",
               place: "小樽市區",
-              activity: "自由逛街＋覓食：午餐、晚餐都看到什麼吃什麼，不特別排定，逛到哪吃到哪",
+              activity: "自由逛街＋覓食：晚餐看到什麼吃什麼，不特別排定，逛到哪吃到哪",
               note: "堺町通り商店街沿途可順遊以下幾間特色店，純參考不用每間都排；兩間オルゴール堂冬季約 18:00 打烊，建議安排在下午較早時段，傍晚留給蒸氣鐘拍照、雪景漫步；<a href=\"https://maps.app.goo.gl/q23VrpgVncU815dB6\" target=\"_blank\" rel=\"noopener\">Google 地圖</a>",
               foodLink: "otaru",
+              meal: true,
               stops: [
                 { name: "三角市場／渡海家 拉麵", map: "https://maps.app.goo.gl/qFCS4Mm4smRy9jW46" },
                 { name: "ポプラファーム小樽店 哈蜜瓜冰淇淋", map: "https://maps.app.goo.gl/YVuM2bcshN9LMxDq9" },
@@ -258,13 +263,13 @@ const TRIP_DATA = {
           id: "sapporo-snowmobile",
           label: "方案二：札幌雪上摩托車",
           items: [
-            { time: "08:00-09:00", place: "東橫INN", activity: "起床吃早餐" },
+            { time: "08:00-09:00", place: "東橫INN", activity: "起床吃早餐", meal: true },
             { type: "transport", transport: "ride", label: "雪上摩托車行程專車接送，前往「定山溪」，車程約 60-80 分鐘" },
             { time: "10:30-11:30", place: "定山溪", activity: "雪上摩托車體驗", note: "需事先線上或電話報名，並確認是否含飯店接送", highlight: true, needsBooking: true },
-            { time: "11:30-13:00", place: "定山溪", activity: "溫泉足湯、午餐" },
+            { time: "11:30-13:00", place: "定山溪", activity: "溫泉足湯、午餐", meal: true },
             { type: "transport", transport: "ride", label: "搭乘じょうてつバス返回「札幌駅」，車程約 60-80 分鐘" },
             { time: "14:30", place: "大通公園／狸小路", activity: "自由活動，也可改去円山動物園（冬季企鵝散步）或白色戀人公園" },
-            { time: "17:30", place: "札幌市區", activity: "晚餐", note: "待討論，可參考美食清單", foodLink: "sapporo" },
+            { time: "17:30", place: "札幌市區", activity: "晚餐", note: "待討論，可參考美食清單", foodLink: "sapporo", meal: true },
             { type: "transport", transport: "ride", label: "搭 JR北海道巴士「啓明線」直達「もいわ山ロープウェイ」，車程約 37 分鐘，僅 17-19 時夜景班次（一天約 3 班，建議出發前查好時刻）" },
             { time: "19:30", place: "藻岩山", activity: "搭纜車＋迷你登山纜車上山頂看夜景", note: "日本新三大夜景之一，回程留意末班車時間；沿路行經駅前通／南一条通也能順便看到ホワイトイルミネーション", highlight: true }
           ]
@@ -277,12 +282,12 @@ const TRIP_DATA = {
       title: "賦歸日",
       scene: "scene-flight-home",
       items: [
-        { time: "9:00", place: "東橫INN 北海道札幌站南口", activity: "Check out" },
-        { time: "9:30", place: "", activity: "吃早餐" },
+        { time: "9:00", place: "東橫INN 北海道札幌站南口", activity: "Check out", stay: true },
+        { time: "9:30", place: "", activity: "吃早餐", meal: true },
         { type: "transport", transport: "ride", label: "搭 JR 快速 Airport 前往「新千歲機場」，車程約 40 分鐘（非包車，當天沒有包車費用）" },
         { time: "12:00", place: "新千歲機場", activity: "多留一小時提前抵達，買伴手禮、逛機場" },
         { time: "12:30", place: "新千歲機場 國內線航廈 4F", activity: "雪初音 SNOWMIKU SKY TOWN", note: "宣傳北海道觀光大使「雪未來（初音未來）」的精品店＋博物館；從國際線航廈走過去約 10 分鐘", people: ["yunting"] },
-        { type: "transport", transport: "flight", label: "【CTS】15:00 起飛 → 【RMQ】18:25 抵達", note: "提早到機場掛行李，出境後再找東西吃、逛免稅" }
+        { type: "transport", transport: "flight", label: "JX319　【CTS】15:00 起飛 → 【RMQ】18:25 抵達", note: "提早到機場掛行李，出境後再找東西吃、逛免稅" }
       ]
     }
   ],

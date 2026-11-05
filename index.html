@@ -115,6 +115,11 @@
   <path d="M4 13 L9.5 18.5 L20 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 </symbol>
 
+<symbol id="icon-memo" viewBox="0 0 24 24">
+  <path d="M5 19 L5.8 15.6 L15.6 5.8 C16.4 5 17.6 5 18.4 5.8 L18.2 5.6 C19 6.4 19 7.6 18.2 8.4 L8.4 18.2 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M13.5 7.9 L16.1 10.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+</symbol>
+
 <symbol id="icon-heart" viewBox="0 0 24 24">
   <path d="M12 21 C12 21 3 15.2 3 9 C3 6.2 5.2 4 8 4 C9.8 4 11.2 4.9 12 6.3 C12.8 4.9 14.2 4 16 4 C18.8 4 21 6.2 21 9 C21 15.2 12 21 12 21 Z" fill="currentColor" stroke="var(--ink)" stroke-width="1.5" stroke-linejoin="round"/>
 </symbol>
@@ -949,9 +954,14 @@
   <span id="motionToggleLabel">減少動態</span>
 </button>
 
+<button class="memo-fab" id="memoFab" type="button" title="記錄今天的小筆記">
+  <svg><use href="#icon-memo"/></svg>
+  <span class="memo-fab__text">小筆記</span>
+</button>
+
 <footer class="site-footer">北海道賞雪 2027 ‧ 行程如有更動請以最新版本為準</footer>
 
-<script src="js/data.js?v=15"></script>
-<script src="js/app.js?v=16"></script>
+<script src="js/data.js?v=25"></script>
+<script src="js/app.js?v=23"></script>
 </body>
 </html>

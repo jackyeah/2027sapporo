@@ -9,7 +9,7 @@
 
   // 待辦清單雲端同步（Google Apps Script Web App 網址，見 apps-script/Code.gs）
   // 留空則只會存在自己瀏覽器的 localStorage，不會同步給其他人看
-  const CHECKLIST_API_URL = "https://script.google.com/macros/s/AKfycbxcg44J-BUFWLw5rpTVCCxtJlBZzMLOZFCrBMS3NWP4vsuQK_327PhyKGsfTIhRpP0Rbw/exec";
+  const CHECKLIST_API_URL = "https://script.google.com/macros/s/AKfycbx4s3O7T3LvIZ3mw_1CXXeSTh-HrebIxF1sOMm9iWmHmEBHgZYn-Z5KqSf9qU0g7RXWIw/exec";
 
   let showPage = () => {};       // 由 initNav 賦值，供跨函式切換頁面
   let selectItineraryDay = () => {}; // 由 renderItinerary 賦值，供首頁「查看完整行程」按鈕使用
@@ -371,11 +371,152 @@
     });
   }
 
+  /* ---------------- 每日小筆記（localStorage 記憶文字，可選接 Google Sheet 同步） ---------------- */
+  const MEMO_STORAGE_KEY = "dayMemos";
+  let memoCache = []; // [{ personId, dayDate, text }]
+  const memoSaveTimers = {};
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  function getLocalMemos() {
+    return JSON.parse(localStorage.getItem(MEMO_STORAGE_KEY) || "{}");
+  }
+  function setLocalMemos(state) {
+    localStorage.setItem(MEMO_STORAGE_KEY, JSON.stringify(state));
+  }
+  function memoKey(personId, dayDate) {
+    return `${personId}::${dayDate}`;
+  }
+
+  function fetchMemosRemote() {
+    if (!CHECKLIST_API_URL) return Promise.resolve(null);
+    return fetch(`${CHECKLIST_API_URL}?type=memos`)
+      .then(res => res.json())
+      .catch(() => null);
+  }
+
+  function syncMemo(personId, dayDate, text) {
+    fetch(CHECKLIST_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" }, // 用 text/plain 避免觸發 CORS 預檢請求
+      body: JSON.stringify({ type: "memo", personId, dayDate, text }),
+    }).catch(() => {});
+  }
+
+  function getMemoText(personId, dayDate) {
+    const remote = memoCache.find(r => r.personId === personId && r.dayDate === dayDate);
+    if (remote) return remote.text || "";
+    const local = getLocalMemos();
+    return local[memoKey(personId, dayDate)] || "";
+  }
+
+  function saveMemoText(personId, dayDate, text) {
+    const local = getLocalMemos();
+    local[memoKey(personId, dayDate)] = text;
+    setLocalMemos(local);
+
+    const existing = memoCache.find(r => r.personId === personId && r.dayDate === dayDate);
+    if (existing) existing.text = text;
+    else memoCache.push({ personId, dayDate, text });
+
+    if (!CHECKLIST_API_URL) return;
+    const key = memoKey(personId, dayDate);
+    clearTimeout(memoSaveTimers[key]);
+    memoSaveTimers[key] = setTimeout(() => syncMemo(personId, dayDate, text), 600);
+  }
+
+  /* ---------------- 浮動小筆記 icon：捲到行程頁且筆記不在視野內時出現 ---------------- */
+  function initMemoFab() {
+    const fab = document.getElementById("memoFab");
+    if (!fab) return;
+
+    function reduceMotion() {
+      return document.body.classList.contains("reduce-motion") || prefersReduced.matches;
+    }
+
+    function isItineraryActive() {
+      const page = document.querySelector('.page[data-page="itinerary"]');
+      return !!(page && page.classList.contains("is-active"));
+    }
+
+    function updateVisibility() {
+      const memo = document.querySelector("#dayPanelWrap .day-memo");
+      if (!isItineraryActive() || !memo) {
+        fab.classList.remove("is-shown");
+        return;
+      }
+      const rect = memo.getBoundingClientRect();
+      const inView = rect.top < window.innerHeight * 0.85 && rect.bottom > 0;
+      fab.classList.toggle("is-shown", !inView);
+    }
+
+    document.addEventListener("scroll", updateVisibility, { passive: true });
+    window.addEventListener("resize", updateVisibility);
+    document.querySelectorAll(".nav__link").forEach(l => l.addEventListener("click", () => setTimeout(updateVisibility, 60)));
+    const dayTabs = document.getElementById("dayTabs");
+    if (dayTabs) dayTabs.addEventListener("click", () => setTimeout(updateVisibility, 60));
+    setInterval(updateVisibility, 1000);
+
+    fab.addEventListener("click", () => {
+      const memo = document.querySelector("#dayPanelWrap .day-memo");
+      if (!memo) return;
+      memo.scrollIntoView({ behavior: reduceMotion() ? "auto" : "smooth", block: "center" });
+      const ta = memo.querySelector(".day-memo__textarea");
+      if (ta && !ta.disabled) setTimeout(() => ta.focus(), reduceMotion() ? 0 : 450);
+    });
+
+    if (!reduceMotion()) {
+      setInterval(() => {
+        if (!fab.classList.contains("is-shown") || reduceMotion()) return;
+        fab.classList.add("is-wiggle");
+        setTimeout(() => fab.classList.remove("is-wiggle"), 850);
+      }, 6000);
+    }
+
+    updateVisibility();
+  }
+
+  function wireDayMemo(panel) {
+    if (!panel) return;
+    const textarea = panel.querySelector(".day-memo__textarea");
+    if (textarea) {
+      textarea.addEventListener("input", () => {
+        const me = getMyIdentity();
+        if (!me) return;
+        saveMemoText(me.id, panel.dataset.dayDate, textarea.value);
+      });
+    }
+    const idBtn = panel.querySelector(".day-memo__set-identity");
+    if (idBtn) idBtn.addEventListener("click", () => openIdentityModal());
+
+    // 捲到底部、小筆記卡片進入視野時，從旁邊滑入
+    const memo = panel.querySelector(".day-memo");
+    if (memo && !prefersReduced.matches && "IntersectionObserver" in window) {
+      memo.classList.add("day-memo--pre");
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            requestAnimationFrame(() => memo.classList.remove("day-memo--pre"));
+            observer.disconnect();
+          }
+        });
+      }, { threshold: 0.2 });
+      observer.observe(memo);
+    }
+  }
+
   /* ---------------- 共用：把單一天的資料轉成時間軸 HTML ---------------- */
   let activeDayPlan = {};
 
   function buildTimelineHtml(day) {
     const meta = TRIP_DATA.transportMeta;
+    const me = getMyIdentity();
+    const savedMemo = me ? getMemoText(me.id, day.date) : "";
     const hasPlans = Array.isArray(day.plans);
     let items = day.items;
     let planTabsHtml = "";
@@ -406,10 +547,16 @@
           </div>
         `;
       }
+      const eventClasses = [
+        item.highlight ? "is-highlight" : "",
+        item.important ? "is-important" : "",
+        item.stay ? "is-stay" : "",
+        item.meal ? "is-meal" : "",
+      ].filter(Boolean).join(" ");
       return `
-        <div class="timeline__event ${item.highlight ? "is-highlight" : ""}">
+        <div class="timeline__event ${eventClasses}">
           ${item.time ? `<div class="timeline__time">${item.time}</div>` : ""}
-          <div class="timeline__place">${item.place || ""}${item.highlight ? '<span class="tag tag--must">必去</span>' : ""}${item.needsBooking ? '<span class="tag tag--booking">需預約</span>' : ""}${(item.people || []).map(pid => {
+          <div class="timeline__place">${item.place || ""}${item.highlight ? '<span class="tag tag--must">必去</span>' : ""}${item.needsBooking ? '<span class="tag tag--booking">需預約</span>' : ""}${item.important ? '<span class="tag tag--important">重要</span>' : ""}${item.stay ? '<span class="tag tag--stay">住宿</span>' : ""}${item.meal ? '<span class="tag tag--meal">用餐</span>' : ""}${(item.people || []).map(pid => {
             const p = PEOPLE.find(person => person.id === pid);
             return p ? `<span class="tag tag--person" style="background:var(--${p.color})">${p.name}專屬</span>` : "";
           }).join("")}</div>
@@ -446,6 +593,14 @@
         <h3 class="day-title">${day.date} (${day.weekday})　${day.title}</h3>
         ${planTabsHtml}
         <div class="timeline">${itemsHtml}</div>
+        <div class="day-memo">
+          <div class="day-memo__label">
+            <svg><use href="#icon-memo"/></svg>
+            ${me ? `${day.date} ${me.name} 的小筆記` : `${day.date} 我的小筆記`}
+          </div>
+          <textarea class="day-memo__textarea" placeholder="想去哪、想買什麼，隨手記一下…"${me ? "" : " disabled"}>${me ? escapeHtml(savedMemo) : ""}</textarea>
+          ${me ? "" : `<button type="button" class="day-memo__set-identity">選擇身份後即可記錄專屬筆記</button>`}
+        </div>
       </div>
     `;
   }
@@ -461,6 +616,7 @@
       if (!day) return;
       activeDayPlan[date] = btn.dataset.planId;
       panel.parentElement.innerHTML = buildTimelineHtml(day);
+      wireDayMemo(panel.parentElement.querySelector(".day-panel"));
     });
   }
 
@@ -480,6 +636,7 @@
     function renderDay(idx) {
       const day = TRIP_DATA.days[idx];
       panelWrap.innerHTML = buildTimelineHtml(day);
+      wireDayMemo(panelWrap.querySelector(".day-panel"));
 
       tabsWrap.querySelectorAll(".day-tab").forEach(t => {
         t.classList.toggle("is-active", Number(t.dataset.idx) === idx);
@@ -503,6 +660,17 @@
     const todayIdx = findTodayIndex();
     const saved = localStorage.getItem(key);
     renderDay(todayIdx !== -1 ? todayIdx : (saved !== null ? Number(saved) : 0));
+
+    if (CHECKLIST_API_URL) {
+      fetchMemosRemote().then(rows => {
+        if (!rows) return;
+        memoCache = rows;
+        const ta = panelWrap.querySelector(".day-memo__textarea");
+        if (ta && document.activeElement === ta) return; // 避免蓋掉正在輸入的內容
+        const activeTab = tabsWrap.querySelector(".day-tab.is-active");
+        if (activeTab) renderDay(Number(activeTab.dataset.idx));
+      });
+    }
   }
 
   function findTodayIndex() {
@@ -849,9 +1017,11 @@
     initFoodLinks();
     initDayPlanTabs();
     initSnowfall();
+    initMemoFab();
 
     refreshPersonalization = () => {
       renderChecklist();
+      renderItinerary();
       highlightMyExpenseRow();
     };
   });

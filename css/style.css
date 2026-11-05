@@ -13,11 +13,13 @@
   --yamabuki: #F6D27A;
   --mizu: #A8D3E6;
   --wakatake: #B9DAA5;
+  --momo: #E3A6CE;
 
   --coral-soft: #FBE2DD;
   --yamabuki-soft: #FBEBC9;
   --mizu-soft: #DCEEF5;
   --wakatake-soft: #E3F0DC;
+  --momo-soft: #F8E4F1;
 
   --border-w: 3px;
   --radius-lg: 28px;
@@ -558,6 +560,24 @@ img, svg { display: block; max-width: 100%; }
 .timeline__event.is-highlight::before {
   background: var(--yamabuki);
 }
+.timeline__event.is-important {
+  background: var(--mizu-soft);
+}
+.timeline__event.is-important::before {
+  background: var(--mizu);
+}
+.timeline__event.is-stay {
+  background: var(--wakatake-soft);
+}
+.timeline__event.is-stay::before {
+  background: var(--wakatake);
+}
+.timeline__event.is-meal {
+  background: var(--momo-soft);
+}
+.timeline__event.is-meal::before {
+  background: var(--momo);
+}
 
 .timeline__time {
   font-size: 0.8rem;
@@ -641,6 +661,134 @@ img, svg { display: block; max-width: 100%; }
   background: #d8d2c9;
 }
 
+.day-memo {
+  position: relative;
+  margin-top: 26px;
+  padding: 18px 16px 14px;
+  background: var(--yamabuki-soft);
+  border: var(--border-w) solid var(--ink);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-hard-sm);
+  transform: rotate(-1deg);
+  opacity: 1;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
+}
+.day-memo.day-memo--pre {
+  opacity: 0;
+  transform: rotate(6deg) translateX(90px) scale(0.92);
+}
+.day-memo::before {
+  content: "";
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  width: 58px;
+  height: 20px;
+  background: var(--coral-soft);
+  border: 1.6px solid var(--ink);
+  border-radius: 3px;
+  transform: translateX(-50%) rotate(-3deg);
+  opacity: 0.95;
+}
+.day-memo__label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--ink);
+}
+.day-memo__label svg {
+  width: 17px;
+  height: 17px;
+  color: var(--coral);
+  flex-shrink: 0;
+}
+.day-memo__textarea {
+  width: 100%;
+  min-height: 130px;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.8;
+  padding: 10px 12px;
+  border: 1.8px dashed #d9b263;
+  border-radius: var(--radius-sm);
+  background: repeating-linear-gradient(#fffdf6, #fffdf6 30px, #f1e4ba 31px);
+  background-attachment: local;
+  color: var(--ink);
+}
+.day-memo__textarea:focus {
+  outline: none;
+  border-style: solid;
+  border-color: var(--coral);
+}
+.day-memo__textarea:disabled {
+  background: #f1ede4;
+  color: #b0a99e;
+}
+.day-memo__set-identity {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--coral);
+  text-decoration: underline;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* ---------- 浮動小筆記 icon（半露出的便條紙） ---------- */
+.memo-fab {
+  position: fixed;
+  right: -36px;
+  top: 64%;
+  z-index: 40;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  width: 84px;
+  padding: 10px 8px 8px;
+  background: var(--yamabuki-soft);
+  border: var(--border-w) solid var(--ink);
+  border-radius: 14px 4px 4px 14px;
+  box-shadow: var(--shadow-hard-sm);
+  color: var(--ink);
+  cursor: pointer;
+  transform: translateY(-50%) rotate(-4deg);
+  transition: right 0.25s ease, transform 0.25s ease;
+}
+.memo-fab.is-shown { display: flex; }
+.memo-fab:hover,
+.memo-fab:focus-visible {
+  right: 0;
+  transform: translateY(-50%) rotate(-1deg);
+}
+.memo-fab svg {
+  width: 20px;
+  height: 20px;
+  color: var(--coral);
+}
+.memo-fab__text {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  writing-mode: vertical-rl;
+}
+.memo-fab.is-wiggle { animation: memo-fab-wiggle 0.85s ease; }
+@keyframes memo-fab-wiggle {
+  0%, 100% { transform: translateY(-50%) rotate(-4deg); }
+  20% { transform: translateY(-50%) rotate(5deg) translateX(-8px); }
+  45% { transform: translateY(-50%) rotate(-9deg) translateX(-12px); }
+  65% { transform: translateY(-50%) rotate(4deg) translateX(-6px); }
+  85% { transform: translateY(-50%) rotate(-2deg) translateX(-2px); }
+}
+@media (max-width: 520px) {
+  .memo-fab { width: 72px; padding: 8px 6px 6px; }
+}
+
 .tag {
   display: inline-block;
   font-size: 0.7rem;
@@ -653,6 +801,9 @@ img, svg { display: block; max-width: 100%; }
 }
 .tag--must { background: var(--coral); }
 .tag--booking { background: var(--yamabuki); }
+.tag--important { background: var(--mizu); }
+.tag--stay { background: var(--wakatake); }
+.tag--meal { background: var(--momo); }
 
 .timeline__transport {
   position: relative;
@@ -1024,7 +1175,8 @@ body.reduce-motion .snowfall,
 body.reduce-motion .day-panel,
 body.reduce-motion .page,
 body.reduce-motion .avatar-eyes,
-body.reduce-motion .identity-modal__card {
+body.reduce-motion .identity-modal__card,
+body.reduce-motion .memo-fab {
   animation: none !important;
 }
 
