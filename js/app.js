@@ -673,7 +673,7 @@
 
   function buildFoodMapLinks(it) {
     const links = it.maps || (it.map ? [it.map] : []);
-    if (!links.length) return "";
+    if (!links.length && !it.ig) return "";
     return `
       <span class="food-card__maps">
         ${links.map((url, i) => `
@@ -681,6 +681,11 @@
             <svg><use href="#icon-map-pin"/></svg>
           </a>
         `).join("")}
+        ${it.ig ? `
+          <a class="food-card__map-link food-card__map-link--ig" href="${it.ig}" target="_blank" rel="noopener" title="在 Instagram 開啟">
+            <svg><use href="#icon-instagram"/></svg>
+          </a>
+        ` : ""}
       </span>
     `;
   }

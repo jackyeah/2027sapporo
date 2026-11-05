@@ -792,6 +792,7 @@ img, svg { display: block; max-width: 100%; }
 }
 .food-card__map-link svg { width: 15px; height: 15px; }
 .food-card__map-link:hover { background: var(--yamabuki); }
+.food-card__map-link--ig:hover { background: var(--coral); }
 
 .food-card__like-wrap { display: flex; align-items: center; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
 .food-card__like {
