@@ -572,13 +572,11 @@
 
   function buildHeartHtml(itemId) {
     const likers = foodLikesCache.filter(r => r.itemId === itemId && r.liked);
-    const me = getMyIdentity();
-    const likedByMe = !!(me && likers.some(l => l.personId === me.id));
     const names = likers.map(l => (PEOPLE.find(p => p.id === l.personId) || {}).name).filter(Boolean);
 
     return `
       <div class="food-card__like-wrap">
-        <button class="food-card__like${likedByMe ? " is-liked" : ""}" data-item-id="${itemId}" title="按愛心表示喜歡">
+        <button class="food-card__like${likers.length ? " is-liked" : ""}" data-item-id="${itemId}" title="按愛心表示喜歡">
           <svg><use href="#icon-heart"/></svg>
           <span class="food-card__like-count">${likers.length}</span>
         </button>
