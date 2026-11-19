@@ -5,10 +5,11 @@
  * 設定步驟：
  *
  * 1. 開一個新的 Google Sheet，把它命名成任意名稱（例如「2027Sapporo DB」）。
- * 2. 在這個 Sheet 裡新增三個分頁（大小寫要一致）：
+ * 2. 在這個 Sheet 裡新增四個分頁（大小寫要一致）：
  *    - "Checklist"：第一列填表頭 person_id | item_index | checked | updated_at
  *    - "Likes"：第一列填表頭 item_id | person_id | liked | updated_at
  *    - "Memos"：第一列填表頭 person_id | day_date | text | updated_at
+ *    - "MealPicks"：第一列填表頭 slot_key | item_id | item_name | person_id | updated_at
  * 3. 選單「擴充功能」→「Apps Script」，把這個檔案的內容整個貼進
  *    編輯器裡（取代預設的 Code.gs 內容），存檔。
  * 4. 點右上角「部署」→「新增部署作業」→ 類型選「網頁應用程式」：
@@ -24,6 +25,7 @@
 const CHECKLIST_SHEET_NAME = "Checklist";
 const LIKES_SHEET_NAME = "Likes";
 const MEMOS_SHEET_NAME = "Memos";
+const MEALPICKS_SHEET_NAME = "MealPicks";
 
 function getSheet_(name) {
   return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(name);
@@ -33,6 +35,7 @@ function doGet(e) {
   const type = e.parameter.type;
   if (type === "likes") return getLikes_();
   if (type === "memos") return getMemos_();
+  if (type === "mealpicks") return getMealPicks_();
   return getChecklist_();
 }
 
@@ -40,6 +43,7 @@ function doPost(e) {
   const body = JSON.parse(e.postData.contents);
   if (body.type === "like") return postLike_(body);
   if (body.type === "memo") return postMemo_(body);
+  if (body.type === "mealpick") return postMealPick_(body);
   return postChecklist_(body);
 }
 
@@ -167,6 +171,58 @@ function postMemo_(body) {
     sheet.getRange(newRow, 2).setNumberFormat("@").setValue(dayDate);
     sheet.getRange(newRow, 3).setValue(text);
     sheet.getRange(newRow, 4).setValue(now);
+  }
+
+  return ContentService.createTextOutput(JSON.stringify({ ok: true }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+// slot_key 代表「某一天的某一餐」（例如 "1/4::::0"），把口袋名單的某道菜指定過去；
+// 回傳格式跟其他 getX_ 不同，是物件 map { [slotKey]: {itemId, itemName, personId} }，
+// 因為前端要用 slotKey 直接查某一餐指定了什麼，不是列表。
+function getMealPicks_() {
+  const sheet = getSheet_(MEALPICKS_SHEET_NAME);
+  const data = sheet.getDataRange().getValues();
+  const state = {};
+  data.slice(1).forEach(r => {
+    const slotKey = String(r[0]);
+    if (!slotKey || r[1] === "") return; // itemId 為空代表該餐已被取消指定，略過
+    state[slotKey] = { itemId: r[1], itemName: r[2], personId: r[3] };
+  });
+  return ContentService.createTextOutput(JSON.stringify(state))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function postMealPick_(body) {
+  const slotKey = body.slotKey;
+  const itemId = body.itemId || "";
+  const itemName = body.itemName || "";
+  const personId = body.personId || "";
+
+  const sheet = getSheet_(MEALPICKS_SHEET_NAME);
+  const data = sheet.getDataRange().getValues();
+  let rowIndex = -1;
+  for (let i = 1; i < data.length; i++) {
+    if (String(data[i][0]) === slotKey) {
+      rowIndex = i + 1; // 轉成 1-based 列號
+      break;
+    }
+  }
+
+  const now = new Date().toISOString();
+  if (rowIndex > 0) {
+    sheet.getRange(rowIndex, 2).setValue(itemId);
+    sheet.getRange(rowIndex, 3).setValue(itemName);
+    sheet.getRange(rowIndex, 4).setValue(personId);
+    sheet.getRange(rowIndex, 5).setValue(now);
+  } else {
+    const newRow = sheet.getLastRow() + 1;
+    // slot_key 欄位強制設成純文字格式，避免 Sheets 把「1/4」這種字串自動轉成日期
+    sheet.getRange(newRow, 1).setNumberFormat("@").setValue(slotKey);
+    sheet.getRange(newRow, 2).setValue(itemId);
+    sheet.getRange(newRow, 3).setValue(itemName);
+    sheet.getRange(newRow, 4).setValue(personId);
+    sheet.getRange(newRow, 5).setValue(now);
   }
 
   return ContentService.createTextOutput(JSON.stringify({ ok: true }))

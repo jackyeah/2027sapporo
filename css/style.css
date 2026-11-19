@@ -965,6 +965,56 @@ img, svg { display: block; max-width: 100%; }
 .food-card__like-count { font-size: 0.78rem; font-weight: 700; }
 .food-card__likers { font-size: 0.72rem; color: #7a746e; }
 
+.food-card__assign {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed #d8d2c9;
+}
+.food-card__assign svg { width: 14px; height: 14px; flex-shrink: 0; color: #8a837c; }
+.food-card__assign.is-assigned svg { color: var(--wakatake); }
+.food-card__assign-select {
+  flex: 1;
+  min-width: 0;
+  font-family: inherit;
+  font-size: 0.76rem;
+  padding: 4px 6px;
+  border: 1.6px solid var(--ink);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: var(--ink);
+}
+
+.timeline__meal-pick {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #4a6b3a;
+  background: var(--wakatake-soft);
+  border: 1.6px solid var(--wakatake);
+  border-radius: var(--radius-sm);
+}
+.timeline__meal-pick svg { width: 13px; height: 13px; flex-shrink: 0; }
+.timeline__meal-unpick {
+  margin-left: auto;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: #4a6b3a;
+  font-size: 0.75rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.timeline__meal-unpick:hover { color: var(--coral); }
+
 /* ---------- 裝備頁 ---------- */
 .gear-group { margin-bottom: 24px; }
 .gear-group__note { font-size: 0.8rem; color: #8a837c; margin: -8px 0 12px; }

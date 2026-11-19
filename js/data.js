@@ -76,7 +76,8 @@ const TRIP_DATA = {
         { time: "18:00", place: "洞爺湖畔亭飯店", activity: "Check in", note: "從飯店看往湖的方向可遠眺羊蹄山", stay: true },
         { time: "17:30-20:30", place: "洞爺湖畔亭飯店", activity: "自助晚餐", note: "懷石小火鍋、小烤肉爐、北海道海鮮，現煮拉麵、甜點、霜淇淋機、刨冰機都有；湖景窗邊座位很熱門，建議提早入座", meal: true },
         { time: "", place: "洞爺湖畔亭頂樓", activity: "露天溫泉", note: "邊泡湯邊眺望洞爺湖夜景" },
-        { time: "", place: "洞爺湖", activity: "湖邊散步看夜景", note: "附近可以去 Seicomart，這是北海道才有的便利商店" }
+        { time: "", place: "洞爺湖", activity: "湖邊散步看夜景", note: "附近可以去 Seicomart，這是北海道才有的便利商店" },
+        { time: "21:00", place: "", activity: "鋒瑋 & 海蒂的兩人時間，請大家不要打擾", important: true }
       ]
     },
     {
@@ -360,14 +361,16 @@ const TRIP_DATA = {
             category: "湯咖哩",
             color: "yamabuki",
             items: [
-              { name: "Suage+ 湯咖喱", desc: "札幌人氣湯咖哩名店，以濃郁香料湯頭、鮮嫩雞腿及大塊北海道蔬菜聞名，食材多以串燒呈現，風味獨特。", map: "https://maps.app.goo.gl/DgxiPQksP27AhhUt6" }
+              { name: "Suage+ 湯咖喱", desc: "札幌人氣湯咖哩名店，以濃郁香料湯頭、鮮嫩雞腿及大塊北海道蔬菜聞名，食材多以串燒呈現，風味獨特。", map: "https://maps.app.goo.gl/DgxiPQksP27AhhUt6" },
+              { name: "CURRY YA! CONG", desc: "札幌人氣咖哩餐廳，以香濃咖哩醬汁與豐富配料聞名，口味濃郁有層次，是札幌值得品嚐的特色美食。", map: "https://maps.app.goo.gl/G95wMRDiLhQbikmS6" }
             ]
           },
           {
             category: "拉麵",
             color: "wakatake",
             items: [
-              { name: "麺屋雪風 すすきの本店", desc: "札幌人氣拉麵名店，以濃厚味噌湯頭搭配香氣十足的炒香蔬菜聞名，麵條Q彈有嚼勁，是薄野必吃的拉麵之一。", map: "https://maps.app.goo.gl/MrwrUd8TSxFsj23d6" }
+              { name: "麺屋雪風 すすきの本店", desc: "札幌人氣拉麵名店，以濃厚味噌湯頭搭配香氣十足的炒香蔬菜聞名，麵條Q彈有嚼勁，是薄野必吃的拉麵之一。", map: "https://maps.app.goo.gl/MrwrUd8TSxFsj23d6" },
+              { name: "札幌沾麵 風來堂", desc: "札幌人氣沾麵名店，以濃郁味噌湯頭搭配魚介豚骨高湯聞名，粗麵Q彈有嚼勁，香氣濃厚，是拉麵愛好者的熱門選擇。", map: "https://maps.app.goo.gl/rCPvZ5opHuWtDhdH7" }
             ]
           },
           {
@@ -375,6 +378,20 @@ const TRIP_DATA = {
             color: "mizu",
             items: [
               { name: "札幌農学校 JR札幌駅店", desc: "位於JR札幌站內的人氣甜點店，以北海道牛奶餅乾及現烤起司蛋糕聞名，奶香濃郁，是旅客購買伴手禮的熱門選擇。", map: "https://maps.app.goo.gl/izNqSY2Btpa2oswR8" }
+            ]
+          },
+          {
+            category: "輕食・三明治",
+            color: "neutral",
+            items: [
+              { name: "Saera 咖啡與三明治店（珈琲とサンドイッチの店 さえら）", desc: "札幌人氣老字號三明治專賣店，以帝王蟹沙拉三明治與鮮奶油水果三明治聞名，口感鬆軟、餡料豐富，是大通站附近的排隊美食。10:00 開門，可以當早餐吃。", map: "https://maps.app.goo.gl/R6dJT4boWjnrsJZy7" }
+            ]
+          },
+          {
+            category: "居酒屋",
+            color: "coral",
+            items: [
+              { name: "SEIS（せいす）", desc: "札幌狸小路的人氣創意日式居酒屋，以北海道新鮮海鮮、釜炊米飯及精選日本酒聞名，料理精緻，氣氛熱鬧。", map: "https://maps.app.goo.gl/9dPNq4UNr8oBnPWp8" }
             ]
           }
         ]

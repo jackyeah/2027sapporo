@@ -521,10 +521,12 @@
     let items = day.items;
     let planTabsHtml = "";
 
+    let activePlanId = "";
     if (hasPlans) {
       if (!activeDayPlan[day.date]) activeDayPlan[day.date] = day.plans[0].id;
       const activePlan = day.plans.find(p => p.id === activeDayPlan[day.date]) || day.plans[0];
       items = activePlan.items;
+      activePlanId = activePlan.id;
       planTabsHtml = `
         <div class="day-plan-tabs">
           ${day.plans.map(p => `
@@ -535,7 +537,7 @@
       `;
     }
 
-    const itemsHtml = items.map(item => {
+    const itemsHtml = items.map((item, idx) => {
       if (item.type === "transport") {
         const m = meta[item.transport] || { label: item.transport, color: "coral" };
         return `
@@ -553,6 +555,11 @@
         item.stay ? "is-stay" : "",
         item.meal ? "is-meal" : "",
       ].filter(Boolean).join(" ");
+
+      const slotKey = item.meal && item.foodLink ? `${day.date}::${activePlanId}::${idx}` : null;
+      const mealPick = slotKey ? getMealPick(slotKey) : null;
+      const mealPickPerson = mealPick ? PEOPLE.find(p => p.id === mealPick.personId) : null;
+
       return `
         <div class="timeline__event ${eventClasses}">
           ${item.time ? `<div class="timeline__time">${item.time}</div>` : ""}
@@ -568,6 +575,13 @@
                 : `<li>${s.name}${s.map ? ` <a href="${s.map}" target="_blank" rel="noopener">Google 地圖</a>` : ""}</li>`
               ).join("")}
             </ol>
+          ` : ""}
+          ${mealPick ? `
+            <div class="timeline__meal-pick">
+              <svg><use href="#icon-food"/></svg>
+              已指定：${escapeHtml(mealPick.itemName || "")}${mealPickPerson ? `（${mealPickPerson.name} 指定）` : ""}
+              <button class="timeline__meal-unpick" data-slot-key="${slotKey}" title="取消指定">✕</button>
+            </div>
           ` : ""}
           ${item.note ? `
             <div class="timeline__note">
@@ -802,6 +816,15 @@
         foodLikesCache = rows;
         renderFoodContent();
       });
+      if (!mealPickCache) {
+        fetchMealPicksRemote().then(state => {
+          if (!state) return;
+          mealPickCache = state;
+          renderFoodContent();
+          renderItinerary();
+          renderHomeStatus();
+        });
+      }
     }
   }
 
@@ -828,6 +851,7 @@
               </div>
               <div class="food-card__desc">${it.desc}</div>
               ${buildHeartHtml(foodItemId(region.id, group.category, it.name))}
+              ${buildFoodAssignHtml(region.id, foodItemId(region.id, group.category, it.name), escapeHtml(it.name))}
             </div>
           `).join("")}
         </div>
@@ -835,6 +859,130 @@
     `).join("");
 
     bindHeartButtons(wrap);
+    bindFoodAssignSelects(wrap);
+  }
+
+  /* ---------------- 口袋名單指定用餐（把某道菜指定到某一天的某一餐，複用同一個 Apps Script，Sheet 另開 "MealPicks" 分頁） ---------------- */
+  const MEALPICK_STORAGE_KEY = "mealPicks"; // { [slotKey]: { itemId, personId } }
+  let mealPickCache = null; // 雲端資料抓回來後覆蓋，null 代表還沒抓到
+
+  function getLocalMealPicks() {
+    return JSON.parse(localStorage.getItem(MEALPICK_STORAGE_KEY) || "{}");
+  }
+  function setLocalMealPicks(state) {
+    localStorage.setItem(MEALPICK_STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function fetchMealPicksRemote() {
+    if (!CHECKLIST_API_URL) return Promise.resolve(null);
+    return fetch(`${CHECKLIST_API_URL}?type=mealpicks`)
+      .then(res => res.json())
+      .catch(() => null);
+  }
+
+  function syncMealPick(slotKey, itemId, itemName, personId) {
+    fetch(CHECKLIST_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" }, // 用 text/plain 避免觸發 CORS 預檢請求
+      body: JSON.stringify({ type: "mealpick", slotKey, itemId: itemId || "", itemName: itemName || "", personId: personId || "" }),
+    }).catch(() => {});
+  }
+
+  function getMealPicksState() {
+    return mealPickCache || getLocalMealPicks();
+  }
+
+  function getMealPick(slotKey) {
+    return getMealPicksState()[slotKey] || null;
+  }
+
+  // 一道菜同時間只能指定到一餐，指定到新的一餐時自動清掉舊的
+  function findSlotKeyForItem(itemId) {
+    const state = getMealPicksState();
+    return Object.keys(state).find(key => state[key] && state[key].itemId === itemId) || null;
+  }
+
+  function setMealPick(slotKey, itemId, itemName, personId) {
+    const local = getLocalMealPicks();
+    if (itemId) {
+      local[slotKey] = { itemId, itemName: itemName || "", personId: personId || "" };
+    } else {
+      delete local[slotKey];
+    }
+    setLocalMealPicks(local);
+    if (mealPickCache) {
+      if (itemId) mealPickCache[slotKey] = { itemId, itemName: itemName || "", personId: personId || "" };
+      else delete mealPickCache[slotKey];
+    }
+    if (CHECKLIST_API_URL) syncMealPick(slotKey, itemId, itemName, personId);
+  }
+
+  // 掃過所有天數（含方案）找出「待討論、可指定美食」的用餐時段
+  function getAllMealSlots() {
+    const slots = [];
+    TRIP_DATA.days.forEach(day => {
+      const planGroups = Array.isArray(day.plans)
+        ? day.plans.map(p => ({ planId: p.id, planLabel: p.label, items: p.items }))
+        : [{ planId: "", planLabel: "", items: day.items }];
+
+      planGroups.forEach(({ planId, planLabel, items }) => {
+        items.forEach((item, idx) => {
+          if (item.meal && item.foodLink) {
+            slots.push({
+              key: `${day.date}::${planId}::${idx}`,
+              dayDate: day.date,
+              weekday: day.weekday,
+              planLabel,
+              regionId: item.foodLink,
+              time: item.time,
+              place: item.place,
+              activity: item.activity,
+            });
+          }
+        });
+      });
+    });
+    return slots;
+  }
+
+  function mealSlotLabel(slot) {
+    const planPart = slot.planLabel ? `〔${slot.planLabel}〕` : "";
+    const where = slot.activity || slot.place || "";
+    return `${slot.dayDate}(${slot.weekday}) ${planPart}${slot.time ? slot.time + " " : ""}${where}`;
+  }
+
+  function buildFoodAssignHtml(regionId, itemId, itemName) {
+    const slots = getAllMealSlots().filter(s => s.regionId === regionId);
+    if (!slots.length) return "";
+    const assignedSlotKey = findSlotKeyForItem(itemId);
+    return `
+      <div class="food-card__assign${assignedSlotKey ? " is-assigned" : ""}">
+        <svg><use href="#icon-food"/></svg>
+        <select class="food-card__assign-select" data-item-id="${itemId}" data-item-name="${itemName}">
+          <option value="">指定到哪一餐…</option>
+          ${slots.map(s => `<option value="${s.key}"${assignedSlotKey === s.key ? " selected" : ""}>${mealSlotLabel(s)}</option>`).join("")}
+        </select>
+      </div>
+    `;
+  }
+
+  function bindFoodAssignSelects(wrap) {
+    wrap.querySelectorAll(".food-card__assign-select").forEach(sel => {
+      sel.addEventListener("change", () => {
+        const itemId = sel.dataset.itemId;
+        const itemName = sel.dataset.itemName;
+        const newSlotKey = sel.value;
+        const me = getMyIdentity();
+
+        const prevSlotKey = findSlotKeyForItem(itemId);
+        if (prevSlotKey && prevSlotKey !== newSlotKey) setMealPick(prevSlotKey, null);
+        if (newSlotKey) setMealPick(newSlotKey, itemId, itemName, me ? me.id : "");
+
+        renderFoodContent();
+        renderItinerary();
+        renderHomeStatus();
+      });
+    });
   }
 
   function buildFoodMapLinks(it) {
@@ -987,6 +1135,18 @@
     });
   }
 
+  /* ---------------- 行程頁：取消指定用餐 ---------------- */
+  function initMealUnpick() {
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest(".timeline__meal-unpick");
+      if (!btn) return;
+      setMealPick(btn.dataset.slotKey, null);
+      renderItinerary();
+      renderFoodContent();
+      renderHomeStatus();
+    });
+  }
+
   /* ---------------- 首頁按鈕 ---------------- */
   function initHomeButtons() {
     document.getElementById("gotoItineraryBtn").addEventListener("click", () => {
@@ -1015,6 +1175,7 @@
     renderHomeStatus();
     initHomeButtons();
     initFoodLinks();
+    initMealUnpick();
     initDayPlanTabs();
     initSnowfall();
     initMemoFab();
